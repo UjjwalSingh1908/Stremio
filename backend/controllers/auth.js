@@ -105,7 +105,7 @@ exports.confirmEmail = (req,res,next)=>{
                 user.save();
                 token.destroy();
 
-                const accesstoken=jwt.sign({id:user.id},ACCESS,{expiresIn:"60s"});
+                const accesstoken=jwt.sign({id:user.id},ACCESS,{expiresIn:"7d"});
                 const refreshtoken=jwt.sign({id:user.id},REFRESH,{expiresIn:"7d"});
 
                 refreshtokenlist.push(refreshtoken);
@@ -312,7 +312,7 @@ exports.renewAccessToken = (req,res,next)=>{
         {
             refreshtokenlist.remove(refreshtoken);
 
-            const accesstoken = jwt.sign({ id: payload.id }, ACCESS, { expiresIn: 20 });
+            const accesstoken = jwt.sign({ id: payload.id }, ACCESS, { expiresIn: "7d" });
             const refreshtoken = jwt.sign({ id:payload.id }, REFRESH, { expiresIn: 7 * 24 * 60 * 60 });
             const { id, email, name } = payload;
             refreshtokenlist.push(refreshtoken);

@@ -4,14 +4,20 @@ const sequelize=require('./utils/database');
 const bodyParser=require('body-parser');
 const PORT=process.env.PORT || 5000;
 const authRoutes = require("./routes/auth");
-const user=require('./models/user');
+const videoRoutes=require('./routes/video');
 const verificationToken=require('./models/verificationToken');
 const forgotPassword=require('./models/forgotpassword')
+//import models
+const user=require('./models/user');
+const video=require('./models/video');
+const like=require('./models/like');
+const comment=require('./models/comment')
 const app=express();
 
 // Express middleware that allows POSTing data
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(bodyParser.json({limit: '50mb', extended: true}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 //To remove CROS (cross-resource-origin-platform) problem
 app.use((req, res, next) =>{   
@@ -21,28 +27,25 @@ app.use((req, res, next) =>{
     next();
 });
 
+
+app.use(express.static("uploads"))
+
 //routes
 app.use(authRoutes);
-
-// //middleware for error handling
-// //errorHandeling Middleware
-// app.use((err,req,res,next) => {
-//     console.log(err)
-//     console.log("here")
-//     res.status(err.statusCode || 500)
-//     res.send({
-//         error: {
-//             status:err.statusCode || 500,
-//             message: err
-            
-//         }
-//     })
-// })
+app.use(videoRoutes);
 
 //associations
 
 user.hasOne(verificationToken);
 verificationToken.belongsTo(user,{constraints: true,onUpdate:"cascade",onDelete:"cascade"});
+video.belongsTo(user,{foreignKey: "userId"});
+user.hasMany(comment, {foreignKey: "userId"});
+comment.belongsTo(user, { foreignKey: "userId" });
+video.hasMany(comment, { foreignKey: "videoId"});
+user.belongsToMany(video, { through: like, foreignKey: "userId" });
+video.belongsToMany(user, { through: like, foreignKey: "videoId" });
+
+
 sequelize
     .sync(
       {force:true}
