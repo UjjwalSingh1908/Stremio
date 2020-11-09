@@ -1,0 +1,64 @@
+.Navbar {
+  background-color: #1b1b1b;
+}
+
+.logo {
+  color: #fff !important;
+  margin-left: 1rem;
+}
+
+.loginButton {
+  background-color: #1b1b1b;
+  color: #fff;
+  border: 2px solid #fff;
+  margin-right: 2rem;
+  width: 6.5rem;
+}
+
+.signupButton {
+  color: #fff;
+  background-color: #ff2f5b;
+  border: 2px solid #ff2f5b;
+  margin-right: 2.5rem;
+  width: 8rem;
+}
+
+.loginButton:hover,
+.signupButton:hover,
+.loginButton:active,
+.signupButton:active {
+  color: #ff2f5b;
+  background-color: #fff;
+  border: 2px solid #fff;
+}
+
+.Search {
+  background-color: #565656;
+  border-color: #565656;
+}
+
+.SearchIcon {
+  background-color: #7e7e7e;
+  border-color: #7e7e7e;
+  color: #ffffff;
+}
+.SearchIcon:hover {
+  color: #fff !important;
+  background-color: #6a6a6a;
+  border-color: 6a6a6a;
+}
+.InputGroup {
+  margin-left: 10rem;
+  width: 40rem !important;
+  border-radius: 5px;
+}
+
+.sidebar {
+  margin-top: 10rem;
+  z-index: 100 !important;
+  background-color: #1b1b1b !important;
+}
+
+.but {
+  z-index: 1000;
+}
