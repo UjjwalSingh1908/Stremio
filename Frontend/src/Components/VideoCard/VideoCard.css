@@ -1,0 +1,33 @@
+.videocard {
+  border: none;
+  background-color: #121212;
+}
+
+.thumbnail {
+  border-radius: 5px;
+  height: 10rem;
+  width: 17.5rem;
+}
+
+.profileimage {
+  height: 2rem !important;
+  width: 2rem !important;
+  float: left;
+  margin-right: 0.5rem;
+  margin-bottom: 2rem;
+}
+.title {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.subtitle {
+  color: #fff;
+  font-size: 0.8rem;
+}
+
+.cardbody {
+  margin: 0%;
+  margin-top: 0.6rem;
+  padding: 0%;
+}

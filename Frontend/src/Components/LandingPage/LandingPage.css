@@ -1,3 +1,9 @@
-.sidebar {
-  z-index: 500;
+.LandingPage {
+  background-color: #121212;
+  height: fit-content;
+  min-height: 100%;
+}
+
+.cardholder {
+  padding: 1.5rem;
 }

@@ -2,9 +2,16 @@
   background-color: #1b1b1b;
 }
 
-.logo {
+.logo,
+.sidelogo {
   color: #fff !important;
   margin-left: 1rem;
+}
+
+@media (min-width: 600px) {
+  .sidelogo {
+    display: none;
+  }
 }
 
 .loginButton {
@@ -53,12 +60,72 @@
   border-radius: 5px;
 }
 
-.sidebar {
-  margin-top: 10rem;
-  z-index: 100 !important;
-  background-color: #1b1b1b !important;
+.Search:focus {
+  box-shadow: none;
+  border: none;
 }
 
-.but {
-  z-index: 1000;
+.sidebar {
+  background-color: #1b1b1b !important;
+  width: 14rem;
+}
+
+.hamburger {
+  color: #fff;
+}
+
+@media (min-width: 600px) {
+  .hamburger {
+    display: none;
+  }
+}
+
+.sidebarContent {
+  color: #fff;
+  margin-top: 2.3rem;
+  padding-right: 1rem;
+}
+
+.sidelink {
+  width: 10 rem;
+  padding-left: 2rem;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  height: 2.2rem;
+  color: #c2c2c2;
+  margin-top: 0.2rem;
+  font-size: 1.1rem;
+}
+
+.activelink {
+  background-color: #a32946;
+  color: #fff;
+  width: 10 rem;
+  padding-left: 2rem;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  height: 2.2rem;
+  background-color: #a32946;
+  font-size: 1.1rem;
+  margin-top: 0.2rem;
+}
+
+.sidelink:hover {
+  text-decoration: none;
+  background-color: #a32946;
+  color: #ffffff;
+}
+
+.link,
+.link:hover {
+  text-decoration: none;
+  color: #fff;
+}
+
+.sidebarlogo {
+  color: #fff;
+  margin: 1rem;
+  font-size: 1.5rem;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  margin-left: 30%;
 }

@@ -3,15 +3,13 @@ import React, { Component } from "react";
 import SideBar from "../Navigation/Sidebar";
 import VideoCard from "../VideoCard/VideoCard";
 
-import classes from "./LandingPage.css";
-
-class LandingPage extends Component {
+class TrendingPage extends Component {
   render() {
     return (
       <React.Fragment>
-        <SideBar active="home">
-          <section className={classes.LandingPage}>
-            <div className={classes.cardholder}>
+        <SideBar active="trending">
+          <section>
+            <div>
               <VideoCard />
             </div>
           </section>
@@ -21,4 +19,4 @@ class LandingPage extends Component {
   }
 }
 
-export default LandingPage;
+export default TrendingPage;
