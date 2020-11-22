@@ -1,12 +1,13 @@
 .videocard {
   border: none;
   background-color: #121212;
+  margin: 1rem;
 }
 
 .thumbnail {
-  border-radius: 5px;
-  height: 10rem;
-  width: 17.5rem;
+  height: 10rem !important;
+  width: 17.5rem !important;
+  /* border: 1px solid #ccc; */
 }
 
 .profileimage {
@@ -30,4 +31,11 @@
   margin: 0%;
   margin-top: 0.6rem;
   padding: 0%;
+}
+
+.playerwrapper {
+  border-radius: 10px;
+  overflow: hidden;
+  height: 10rem;
+  width: 17.5rem;
 }

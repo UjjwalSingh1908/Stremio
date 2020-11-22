@@ -30,10 +30,21 @@
   width: 8rem;
 }
 
+.logoutbutton {
+  color: #fff;
+  background-color: #ff2f5b;
+  border: 2px solid #ff2f5b;
+  margin-right: 2rem;
+  margin-left: 2rem;
+  width: 5rem;
+}
+
 .loginButton:hover,
+.logoutbutton:hover,
 .signupButton:hover,
 .loginButton:active,
-.signupButton:active {
+.signupButton:active,
+.logoutbutton:active {
   color: #ff2f5b;
   background-color: #fff;
   border: 2px solid #fff;

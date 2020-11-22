@@ -1,15 +1,18 @@
 import React, { Component } from "react";
 import Navbar from "../Navigation/Navbar";
 import { Link, Redirect } from "react-router-dom";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import classes from "./Forms.css";
 import ServerService from "../../ServerService";
+import Alerts from "../Alerts/Alert";
 
 class Signup extends Component {
   state = {
     input: { name: "", email: "", password: "", confirmPassword: "" },
     errors: { email: "", passwordlen: "", confirmpw: "" },
     redirect: null,
+    type: "",
+    text: "",
   };
 
   validate = () => {
@@ -69,6 +72,17 @@ class Signup extends Component {
       ServerService.Signup(data)
         .then((res) => {
           console.log(res);
+          if (res.status === 200) {
+            // alert(
+            //   "we have sent u an email for verification! please verify your account to login "
+            // );
+            this.setState({
+              type: "success",
+              text:
+                "We have sent u an email for verification! please verify your account to login...",
+            });
+            this.setState({ redirect: "/login" });
+          }
         })
         .catch((err) => {
           console.log(err.response);
@@ -77,6 +91,11 @@ class Signup extends Component {
   };
 
   render() {
+    let alert = <div style={{ lineHeight: "5", display: "none" }}>a</div>;
+
+    if (this.state.text)
+      alert = <Alerts type={this.state.type} text={this.state.text} />;
+
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />;
     }
@@ -85,6 +104,7 @@ class Signup extends Component {
       <React.Fragment>
         <Navbar />
         <section className={classes.page}>
+          {alert}
           <Container fluid>
             <Row>
               <Col md={{ span: 4, offset: 4 }} className={classes.signupform}>

@@ -6,11 +6,16 @@ import {
   faBars,
   faHome,
   faChartLine,
+  faVideo,
+  faHistory,
+  faThumbsUp,
+  faToggleOn,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import { Navbar, Form, Button, FormControl, InputGroup } from "react-bootstrap";
-import { Nav, NavItem } from "react-bootstrap";
 import classes from "./Navigation.css";
 import { Link } from "react-router-dom";
+import { Avatar } from "@material-ui/core";
 
 const mql = window.matchMedia(`(min-width: 600px)`);
 
@@ -43,6 +48,118 @@ class SideBar extends React.Component {
   }
 
   render() {
+    let token = localStorage.getItem("token");
+    let Auth = false;
+    if (token != null) {
+      if (token !== "undefined") {
+        Auth = true;
+      }
+    }
+
+    let Nav = null;
+
+    if (Auth) {
+      Nav = (
+        <Navbar className={classes.Navbar} sticky="top">
+          <span className={classes.burgericon}>
+            <FontAwesomeIcon
+              icon={faBars}
+              onClick={() => this.onSetSidebarOpen(true)}
+              className={classes.hamburger}
+            />{" "}
+          </span>
+
+          <Navbar.Brand as={Link} to="/" className={classes.sidelogo}>
+            STREMIO
+          </Navbar.Brand>
+          <Form inline>
+            <InputGroup className={classes.InputGroup}>
+              <FormControl
+                type="text"
+                placeholder="Search"
+                className={classes.Search}
+              />
+              <InputGroup.Append>
+                <InputGroup.Text
+                  type="submit"
+                  className={classes.SearchIcon}
+                  as={Link}
+                  to="/search"
+                >
+                  <FontAwesomeIcon icon={faSearch} />
+                </InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+          </Form>
+          <Navbar.Collapse className="justify-content-end">
+            <Avatar src={localStorage.getItem("profilepic")} />
+            <Button
+              variant="null"
+              as={Link}
+              to="/"
+              onClick={() => localStorage.clear()}
+              className={classes.logoutbutton}
+            >
+              Logout
+            </Button>
+          </Navbar.Collapse>
+        </Navbar>
+      );
+    } else {
+      Nav = (
+        <Navbar className={classes.Navbar} sticky="top">
+          <span className={classes.burgericon}>
+            <FontAwesomeIcon
+              icon={faBars}
+              onClick={() => this.onSetSidebarOpen(true)}
+              className={classes.hamburger}
+            />{" "}
+          </span>
+
+          <Navbar.Brand as={Link} to="/" className={classes.sidelogo}>
+            STREMIO
+          </Navbar.Brand>
+          <Form inline>
+            <InputGroup className={classes.InputGroup}>
+              <FormControl
+                type="text"
+                placeholder="Search"
+                className={classes.Search}
+              />
+              <InputGroup.Append>
+                <InputGroup.Text
+                  type="submit"
+                  className={classes.SearchIcon}
+                  as={Link}
+                  to="/search"
+                >
+                  <FontAwesomeIcon icon={faSearch} />
+                </InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+          </Form>
+          <Navbar.Collapse className="justify-content-end">
+            <Button
+              variant="null"
+              as={Link}
+              to="/login"
+              className={classes.loginButton}
+            >
+              Login
+            </Button>
+            <Button
+              variant="null"
+              as={Link}
+              to="/signup"
+              className={classes.signupButton}
+            >
+              Sign Up
+            </Button>
+          </Navbar.Collapse>
+        </Navbar>
+      );
+    }
+
     return (
       <React.Fragment>
         <Sidebar
@@ -81,6 +198,69 @@ class SideBar extends React.Component {
                       <span style={{ paddingLeft: "1rem" }}> Trending </span>
                     </div>
                   </Link>
+                  <Link to="/subscribed" className={classes.link}>
+                    <div
+                      className={
+                        this.props.active === "subscribed"
+                          ? classes.activelink
+                          : classes.sidelink
+                      }
+                    >
+                      <FontAwesomeIcon icon={faToggleOn} />{" "}
+                      <span style={{ paddingLeft: "1rem" }}> Subscribed </span>
+                    </div>
+                  </Link>
+                  <Link to="/history" className={classes.link}>
+                    <div
+                      className={
+                        this.props.active === "history"
+                          ? classes.activelink
+                          : classes.sidelink
+                      }
+                    >
+                      <FontAwesomeIcon icon={faHistory} />{" "}
+                      <span style={{ paddingLeft: "1rem" }}> History </span>
+                    </div>
+                  </Link>
+                  <Link to="/likedvideos" className={classes.link}>
+                    <div
+                      className={
+                        this.props.active === "likedvideos"
+                          ? classes.activelink
+                          : classes.sidelink
+                      }
+                    >
+                      <FontAwesomeIcon icon={faThumbsUp} />{" "}
+                      <span style={{ paddingLeft: "1rem" }}>
+                        {" "}
+                        Liked Videos{" "}
+                      </span>
+                    </div>
+                  </Link>
+                  <Link to="/watchlater" className={classes.link}>
+                    <div
+                      className={
+                        this.props.active === "watchlater"
+                          ? classes.activelink
+                          : classes.sidelink
+                      }
+                    >
+                      <FontAwesomeIcon icon={faClock} />{" "}
+                      <span style={{ paddingLeft: "1rem" }}> Watch Later </span>
+                    </div>
+                  </Link>
+                  <Link to="/yourvideos" className={classes.link}>
+                    <div
+                      className={
+                        this.props.active === "yourvideos"
+                          ? classes.activelink
+                          : classes.sidelink
+                      }
+                    >
+                      <FontAwesomeIcon icon={faVideo} />{" "}
+                      <span style={{ paddingLeft: "1rem" }}> Your Videos </span>
+                    </div>
+                  </Link>
                 </nav>
               </div>
             </React.Fragment>
@@ -90,56 +270,7 @@ class SideBar extends React.Component {
           docked={this.state.sidebarDocked}
           onSetOpen={this.onSetSidebarOpen}
         >
-          <Navbar className={classes.Navbar} sticky="top">
-            <span className={classes.burgericon}>
-              <FontAwesomeIcon
-                icon={faBars}
-                onClick={() => this.onSetSidebarOpen(true)}
-                className={classes.hamburger}
-              />{" "}
-            </span>
-
-            <Navbar.Brand as={Link} to="/" className={classes.sidelogo}>
-              STREMIO
-            </Navbar.Brand>
-            <Form inline>
-              <InputGroup className={classes.InputGroup}>
-                <FormControl
-                  type="text"
-                  placeholder="Search"
-                  className={classes.Search}
-                />
-                <InputGroup.Append>
-                  <InputGroup.Text
-                    type="submit"
-                    className={classes.SearchIcon}
-                    as={Link}
-                    to="/search"
-                  >
-                    <FontAwesomeIcon icon={faSearch} />
-                  </InputGroup.Text>
-                </InputGroup.Append>
-              </InputGroup>
-            </Form>
-            <Navbar.Collapse className="justify-content-end">
-              <Button
-                variant="null"
-                as={Link}
-                to="/login"
-                className={classes.loginButton}
-              >
-                Login
-              </Button>
-              <Button
-                variant="null"
-                as={Link}
-                to="/signup"
-                className={classes.signupButton}
-              >
-                Sign Up
-              </Button>
-            </Navbar.Collapse>
-          </Navbar>
+          {Nav}
           {this.props.children}
         </Sidebar>
       </React.Fragment>

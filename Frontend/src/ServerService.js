@@ -1,14 +1,19 @@
 import axios from "axios";
+import { trackPromise } from "react-promise-tracker";
 
-const BASE_URL = "http://73a5bbaa4a57.ngrok.io/";
+const BASE_URL = "https://stremio--app.herokuapp.com/";
 
 class ServerService {
   Signup(data) {
-    return axios.post(BASE_URL + "signup", data);
+    return trackPromise(axios.post(BASE_URL + "signup", data));
   }
 
   Login(data) {
-    return axios.post(BASE_URL + "login", data);
+    return trackPromise(axios.post(BASE_URL + "login", data));
+  }
+
+  Home() {
+    return trackPromise(axios.get(BASE_URL + "home"));
   }
 }
 
