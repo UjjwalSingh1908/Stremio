@@ -1,0 +1,42 @@
+.VideoList {
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.thumbnail {
+  height: 10rem !important;
+  width: 17.5rem !important;
+  /* border: 1px solid #ccc; */
+}
+
+.playerwrapper {
+  border-radius: 10px;
+  overflow: hidden;
+  height: 10rem;
+  width: 17.5rem;
+}
+
+.content {
+  margin-left: 2rem;
+  margin-top: 0.5rem;
+}
+
+.heading {
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.subheading {
+  font-size: 1rem;
+  color: #757575;
+}
+
+.description {
+  font-size: 1rem;
+  color: #757575;
+}
+
+.Link:hover {
+  text-decoration: none;
+}

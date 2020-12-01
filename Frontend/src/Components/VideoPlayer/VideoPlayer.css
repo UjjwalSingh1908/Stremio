@@ -2,4 +2,77 @@
   background-color: #121212;
   height: fit-content;
   min-height: 100%;
+  color: #fff;
+}
+
+.hover {
+  padding: 0.5rem;
+  margin-right: 4rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+}
+
+.hover:active {
+  background-color: #474747;
+}
+
+.iconInactive {
+  color: #ccc;
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.iconActive {
+  color: #ff2f5b;
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.iconActive:active,
+.iconInactive:active {
+  transform: scale(1.5);
+}
+
+.iconContainer {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.title {
+  display: inline;
+  padding-left: 0.5rem;
+}
+
+.hr {
+  width: 83%;
+  background-color: #303030;
+}
+
+.avatar {
+  display: flex;
+  flex-direction: row;
+}
+
+.subscribe {
+  background-color: #ff2f5b;
+  color: #fff;
+  border: none;
+}
+
+.commentInput {
+  width: 52vw;
+  box-shadow: none;
+  color: #fff !important;
+  background-color: #121212;
+  border: none;
+  border-bottom: 1px solid #303030;
+  margin: 0.5rem;
 }

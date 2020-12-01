@@ -1,0 +1,86 @@
+.container {
+  background-color: #121212;
+  width: 100%;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.profile {
+  background-color: #181818;
+  padding: 4rem 4rem 1rem 4rem;
+}
+
+.userdetails {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2rem;
+}
+
+.profileimage {
+  height: 5rem !important;
+  width: 5rem !important;
+  margin-right: 1rem;
+}
+
+.subscribe {
+  height: 2.4rem;
+  margin-top: 1rem !important;
+  margin-left: 60% !important;
+}
+
+.imagecontainer {
+  position: relative;
+  margin-left: 38%;
+  margin-bottom: 1rem;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8rem;
+  width: 8rem;
+  border-radius: 50%;
+  opacity: 0;
+  transition: 0.3s ease;
+  background-color: #a32946;
+}
+
+.myprofileimage {
+  height: 8rem !important;
+  width: 8rem !important;
+}
+
+.icon {
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  top: 4rem;
+  left: 4rem;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.imagecontainer:hover .overlay {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.input {
+  display: none;
+}
+
+.forminput {
+  background-color: #959595;
+  border: none;
+  color: #ffffff;
+}
+
+.forminput:focus {
+  outline: none !important;
+  border: 2px solid #f50057;
+  box-shadow: none;
+}

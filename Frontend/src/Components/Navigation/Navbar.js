@@ -41,7 +41,14 @@ class NavBar extends Component {
             </InputGroup>
           </Form>
           <Navbar.Collapse className="justify-content-end">
-            <Avatar src={localStorage.getItem("profilepic")} />
+            <Link to="/myprofile">
+              <Avatar
+                src={localStorage.getItem("profilepic")}
+                as={Link}
+                to="/myprofile"
+              />
+            </Link>
+
             <Button
               variant="null"
               as={Link}

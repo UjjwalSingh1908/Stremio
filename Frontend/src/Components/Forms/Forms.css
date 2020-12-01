@@ -37,7 +37,7 @@
 .loginform input:focus,
 .signupform input:focus {
   outline: none !important;
-  border: 2px solid #ff2f5b;
+  border: 2px solid #f50057;
   box-shadow: none;
 }
 
@@ -50,7 +50,7 @@
 
 .button {
   width: 100%;
-  background-color: #ff2f5b;
+  background-color: #f50057;
   color: #ffffff;
   margin-top: 1.5rem;
 }
@@ -66,7 +66,7 @@
 
 .link {
   text-decoration: none;
-  color: #ff2f5b;
+  color: #f50057;
 }
 
 .link:hover {
@@ -74,5 +74,5 @@
 }
 
 .error {
-  color: #ff2f5b;
+  color: #f50057;
 }

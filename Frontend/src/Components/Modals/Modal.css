@@ -1,0 +1,38 @@
+.dialog {
+  background-color: #212121 !important;
+  color: #ffffff;
+}
+
+.textArea {
+  background-color: #1c1c1c;
+  color: #ffffff;
+  border: none;
+  width: 80%;
+  margin-top: 1rem;
+  height: 2.5rem;
+}
+
+.uploadModal {
+  background-color: #3a3a3a !important;
+  color: #ffffff;
+}
+
+.form {
+  margin: 2rem;
+}
+
+.input {
+  background-color: #959595;
+  border: none;
+  color: #ffffff;
+}
+
+.input:focus {
+  outline: none !important;
+  border: 2px solid #f30157;
+  box-shadow: none;
+}
+
+.input::placeholder {
+  color: #fff;
+}

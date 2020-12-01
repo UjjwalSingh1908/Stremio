@@ -3,12 +3,19 @@ import Navbar from "../Navigation/Navbar";
 import { Link, Redirect } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import classes from "./Forms.css";
-import ServerService from "../../ServerService";
+
 import Alerts from "../Alerts/Alert";
+import ServerService from "../../ServerService";
 
 class Signup extends Component {
   state = {
-    input: { name: "", email: "", password: "", confirmPassword: "" },
+    input: {
+      name: "",
+      channelName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
     errors: { email: "", passwordlen: "", confirmpw: "" },
     redirect: null,
     type: "",
@@ -65,10 +72,12 @@ class Signup extends Component {
       //alert("validation successful");
       const data = {
         name: this.state.input.name,
+        channelName: this.state.input.channelName,
         email: this.state.input.email,
         password: this.state.input.password,
         confirmPassword: this.state.input.confirmPassword,
       };
+      // console.log(data);
       ServerService.Signup(data)
         .then((res) => {
           console.log(res);
@@ -81,7 +90,12 @@ class Signup extends Component {
               text:
                 "We have sent u an email for verification! please verify your account to login...",
             });
-            this.setState({ redirect: "/login" });
+            //this.setState({ redirect: "/login" });
+          } else if (res.status === 400) {
+            this.setState({
+              type: "error",
+              text: "hi",
+            });
           }
         })
         .catch((err) => {
@@ -116,6 +130,17 @@ class Signup extends Component {
                       type="text"
                       placeholder="Enter Name"
                       name="name"
+                      required
+                      onChange={this.handleChange}
+                    />
+                  </Form.Group>
+
+                  <Form.Group>
+                    <Form.Label>Channel Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter a unique Channel Name"
+                      name="channelName"
                       required
                       onChange={this.handleChange}
                     />

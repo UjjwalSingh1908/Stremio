@@ -92,7 +92,10 @@ class SideBar extends React.Component {
             </InputGroup>
           </Form>
           <Navbar.Collapse className="justify-content-end">
-            <Avatar src={localStorage.getItem("profilepic")} />
+            <Link to="/myprofile">
+              <Avatar src={localStorage.getItem("profilepic")} />
+            </Link>
+
             <Button
               variant="null"
               as={Link}
