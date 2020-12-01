@@ -17,7 +17,7 @@ const refreshtokenlist=[];
 
 exports.signup =  (req,res,next) =>{
 
-    const{name,email,password,confirmPassword}=req.body;
+    const{name,email,password,confirmPassword,channelName}=req.body;
     console.log(req.body);
     //check email validation
     var valid = emailRegex.test(email);
@@ -33,31 +33,42 @@ exports.signup =  (req,res,next) =>{
     }
 
     //all details should be mentioned
-    if(!email || !password || !name || !confirmPassword ) {
+    if(!email || !password || !name || !confirmPassword || !channelName) {
         
         return res.status(422).json({error:"please add all the fields"});
     }
 
     //password should be confirmed
     if(password != confirmPassword) {
-        return res.status(422).json({error:"confirm your password"})
+        return res.status(422).json({error:"password do not matched"})
     }
 
     User.create({
         name:name,
         email:email,
+        channelName:channelName,
         password:bcrypt.hashSync(req.body.password,8)
     })
     .then(user=>{
-        const token = new Token({ email: email, token: crypto.randomBytes(16).toString('hex') });
-        token.save();
+        //console.log(user.id);
+        Token.create({
+            email: email, token: crypto.randomBytes(16).toString('hex') 
+        })
+        .then(token=>{
+
+            console.log(req.headers.host);
+            res.status(200).json({
+                message: "hurrah you singed up successfully",
+                token: token
+            });
+            return email_sender.sendemail(email, token.token, name, req.headers.host);
+        })
+        .catch(err=>{
+            res.json(err);
+        })
+        // const token = new Token({ });
+        // token.save();
         //console.(token);
-        console.log(req.headers.host);
-        res.status(200).json({
-            message:"hurrah you singed up successfully",
-            token:token
-        });
-        return email_sender.sendemail(email, token.token, name, req.headers.host);
         // res.send(token);
        // res.status(200).json({message:"hurrah you singed up successfully"});
     })
@@ -104,6 +115,16 @@ exports.confirmEmail = (req,res,next)=>{
                 user.isverified = "true";
                 user.save();
                 token.destroy();
+                return res.status(200).send({
+                    message:"Your account has been successfully verified",
+                    // accesstoken,
+                    // refreshtoken,
+                    // user:{
+                    //     id,
+                    //     email,
+                    //     name
+                    // }
+                });
 
                 const accesstoken=jwt.sign({id:user.id},ACCESS,{expiresIn:"7d"});
                 const refreshtoken=jwt.sign({id:user.id},REFRESH,{expiresIn:"7d"});
@@ -114,7 +135,7 @@ exports.confirmEmail = (req,res,next)=>{
                 //res.send('Your account has been successfully verified');
                 //console.log(accesstoken);
                 console.log("<---------hello token generated------------------>");
-
+                res.redirect('/home');
                 return res.status(200).send({
                     message:"Your account has been successfully verified",
                     accesstoken,
@@ -314,7 +335,7 @@ exports.renewAccessToken = (req,res,next)=>{
 
             const accesstoken = jwt.sign({ id: payload.id }, ACCESS, { expiresIn: "7d" });
             const refreshtoken = jwt.sign({ id:payload.id }, REFRESH, { expiresIn: 7 * 24 * 60 * 60 });
-            const { id, email, name } = payload;
+            const { id, email, name,profilepic } = payload;
             refreshtokenlist.push(refreshtoken);
             return res.status(201).json({
                 accesstoken: accesstoken,
@@ -349,18 +370,14 @@ exports.login = (req,res,next)=>{
             email:email
         }
     })
-    .then(savedUser=>{
-        console.log(savedUser)
-
-        if(!savedUser.email)
+    .then(user=>{
+        //console.log(user)
+        if(!user)
         {
-            return res.status(422).json({message:"please signup first"});
+            //console.log("hello");
+            return res.status(422).json({error:"please signup first"});
         }
-        else if(!savedUser)
-        {
-            return res.status(422).json({message:"invalid email or password"});
-        }
-        else if(savedUser.isverified==="false")
+        else if(user.isverified==="false")
         {
             //not verified
             const token = new Token({ email: email, token: crypto.randomBytes(16).toString('hex') });
@@ -371,23 +388,24 @@ exports.login = (req,res,next)=>{
                 message: "hurrah you singed up successfully",
                 token:token
             });
-            return email_sender.sendemail(email, token.token, savedUser.name, req.headers.host);
+            return email_sender.sendemail(email, token.token, user.name, req.headers.host);
         }
         else
         {
-            bcrypt.compare(password,savedUser.password)
+            //console.log("hello");
+            bcrypt.compare(password,user.password)
             .then(doMatch=>{
 
                 if(doMatch)
                 {
-                    const accesstoken = jwt.sign({ id: user.id }, ACCESS, { expiresIn: "60s" });
-                    const refreshtoken = jwt.sign({ id: user.id }, REFRESH, { expiresIn: "7d" });
+                    const accesstoken=jwt.sign({id:user.id},ACCESS,{expiresIn:"7d"});
+                    const refreshtoken=jwt.sign({id:user.id},REFRESH,{expiresIn:"7d"});
 
-                    refreshtokenlist.push(refreshtoken);
+                   refreshtokenlist.push(refreshtoken);
 
-                    const { id, email, name } = user;
+                    const { id, email, name,profilepic,channelName } = user;
                     //res.send('Your account has been successfully verified');
-                    //console.log(accesstoken);
+                   // console.log(accesstoken);
                     console.log("<---------hello token generated------------------>");
 
                     return res.status(200).send({
@@ -397,7 +415,9 @@ exports.login = (req,res,next)=>{
                         user: {
                             id,
                             email,
-                            name
+                            name,
+                            profilepic,
+                            channelName
                         }
                     });
                 }

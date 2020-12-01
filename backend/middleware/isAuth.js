@@ -14,7 +14,7 @@ module.exports=(req,res,next)=>{
             return res.status(401).json(err)
         }
 
-        const {id,email,name}=payload
+        const {id,email,name,profilepic}=payload
         console.log(email);
         User.findOne({
             where:{

@@ -4,7 +4,7 @@ const sequelize=require('../utils/database');
 
 const video=sequelize.define('video',{
     id:{
-        type:Sequelize.INTEGER,
+        type:Sequelize.INTEGER(11),
         autoIncrement:true,
         allowNull:false,
         primaryKey:true
@@ -22,7 +22,36 @@ const video=sequelize.define('video',{
     {
         type:Sequelize.STRING,
         allowNull:false
+    },
+    viewsCount:
+    {
+        type:Sequelize.INTEGER,
+        defaultValue:0
+    },
+    likesCount:
+    {
+        type:Sequelize.INTEGER,
+        defaultValue:0
+    },
+    dislikesCount:
+    {
+        type:Sequelize.INTEGER,
+        defaultValue:0
+    },
+    commentsCount:
+    {
+        type:Sequelize.INTEGER,
+        defaultValue:0
+    },
+    subscribersCount:
+    {
+        type:Sequelize.INTEGER,
+        defaultValue:0
     }
+    // thumbnail:
+    // {
+    //     type:Sequelize.STRING
+    // }
 
 });
 

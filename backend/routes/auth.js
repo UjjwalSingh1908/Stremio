@@ -8,9 +8,10 @@ const isAuth=require('../middleware/isAuth')
 //importing controllers 
 const authController = require("../controllers/auth");
 const checkemail=require('../helpers/checkemail');
+const checkChannelName=require('../helpers/channelname');
 
 //route for authentication
-router.post("/signup", [checkemail.check_duplicate_email],authController.signup);
+router.post("/signup", [checkemail.check_duplicate_email,checkChannelName.uniqueChannelName],authController.signup);
 router.get("/confirmation/:email/:token",authController.confirmEmail);
 router.post("/resend_verification_email",authController.resendemail);
 router.post("/forgotpassword",authController.forgotPasswordLink);

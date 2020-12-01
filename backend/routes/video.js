@@ -31,6 +31,14 @@ const fileFilter = (req,file,cb)=>{
 const imp = multer({storage:storage ,fileFilter:fileFilter}).single("video");
 
 router.post('/uploadvideo',[isAuth,imp],videoController.uploadvideo);
+router.get('/home',videoController.home);
+router.get("/:id/video",[isAuth],videoController.getvideo);
+router.get("/:id/view",[isAuth],videoController.viewVideo);
+router.get("/:id/like",[isAuth],videoController.likeVideo);
+router.get("/:id/dislike",[isAuth],videoController.dislikeVideo);
+router.post("/:id/comment",[isAuth],videoController.addComment);
+router.delete("/:id/delete",[isAuth],videoController.deleteVideo);
+router.put("/:id/editVideo",[isAuth,imp],videoController.editVideo);
 
 
 module.exports = router;

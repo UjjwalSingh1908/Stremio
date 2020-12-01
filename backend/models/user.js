@@ -29,6 +29,21 @@ const User=sequelize.define('user',{
     {
         type:Sequelize.STRING,
         defaultValue:"false"
+    },
+    profilepic:
+    {
+        type:Sequelize.STRING
+    },
+    channelName:
+    {
+        type:Sequelize.STRING,
+        unique:true,
+        allowNull:false
+    },
+    subscriberCount:
+    {
+        type:Sequelize.INTEGER,
+        defaultValue:0
     }
 
 });
