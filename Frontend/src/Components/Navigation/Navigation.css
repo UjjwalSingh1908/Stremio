@@ -8,7 +8,7 @@
   margin-left: 1rem;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .sidelogo {
     display: none;
   }
@@ -85,7 +85,7 @@
   color: #fff;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .hamburger {
     display: none;
   }
@@ -139,4 +139,30 @@
   font-size: 1.5rem;
   font-family: "Segoe UI", "Helvetica Neue", sans-serif;
   margin-left: 30%;
+}
+
+@media (max-width: 768px) {
+  .InputGroup {
+    width: 20rem !important;
+    margin-left: 5rem;
+  }
+}
+
+@media (max-width: 426px) {
+  .InputGroup {
+    width: 9rem !important;
+    margin-left: 0.5rem;
+  }
+  .signupButton {
+    width: 5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    padding-right: 0%;
+    padding-left: 0%;
+  }
+  .loginButton {
+    width: 4rem;
+    margin-left: 0.5rem;
+    margin-right: 0 !important;
+  }
 }

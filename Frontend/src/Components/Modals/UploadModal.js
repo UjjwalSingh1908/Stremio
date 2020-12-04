@@ -8,6 +8,7 @@ class UploadModal extends Component {
     input: {
       title: "",
       description: "",
+      category: "",
     },
     image: null,
     video: null,
@@ -20,6 +21,25 @@ class UploadModal extends Component {
     this.setState({
       input,
     });
+  };
+
+  submitHandler = (event) => {
+    event.preventDefault();
+    const data = {
+      title: this.state.title,
+      description: this.state.description,
+      category: this.state.category,
+      image: this.state.image,
+      video: this.state.video,
+    };
+    console.log(data);
+
+    const fd = new FormData();
+
+    for (let formElement in data) {
+      fd.append(formElement, data[formElement]);
+      console.log(formElement, data[formElement]);
+    }
   };
 
   imageHandler = (event) => {
@@ -52,7 +72,7 @@ class UploadModal extends Component {
           Upload New Video
         </Modal.Header>
         <Modal.Body>
-          <Form className={classes.form}>
+          <Form className={classes.form} onSubmit={this.submitHandler}>
             <Form.Group>
               <Form.Label>Video Title</Form.Label>
               <Form.Control
@@ -76,6 +96,22 @@ class UploadModal extends Component {
                 name="description"
               />
             </Form.Group>
+            <Form.Group>
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                as="select"
+                required
+                className={classes.input}
+                name="category"
+                onChange={this.inputHandler}
+              >
+                <option>Music</option>
+                <option>Gaming</option>
+                <option>News</option>
+                <option>Movies</option>
+                <option>Others</option>
+              </Form.Control>
+            </Form.Group>
 
             <Form.Group>
               <Form.File
@@ -90,7 +126,7 @@ class UploadModal extends Component {
                 id="exampleFormControlFile1"
                 label="Video"
                 required
-                onChange={this.imageHandler}
+                onChange={this.videoHandler}
               />
             </Form.Group>
             <Button

@@ -17,7 +17,7 @@ import classes from "./Navigation.css";
 import { Link } from "react-router-dom";
 import { Avatar } from "@material-ui/core";
 
-const mql = window.matchMedia(`(min-width: 600px)`);
+const mql = window.matchMedia(`(min-width: 768px)`);
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -25,6 +25,9 @@ class SideBar extends React.Component {
     this.state = {
       sidebarDocked: true,
       sidebarOpen: false,
+      input: {
+        keyword: "",
+      },
     };
 
     this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
@@ -35,9 +38,9 @@ class SideBar extends React.Component {
     mql.addListener(this.mediaQueryChanged);
   }
 
-  //componentWillUnmount() {
-  //  this.state.mql.removeListener(this.mediaQueryChanged);
-  //}
+  componentWillUnmount() {
+    mql.removeListener(this.mediaQueryChanged);
+  }
 
   onSetSidebarOpen(open) {
     this.setState({ sidebarOpen: open });
@@ -46,6 +49,15 @@ class SideBar extends React.Component {
   mediaQueryChanged() {
     this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
   }
+
+  searchHandler = (event) => {
+    let input = this.state.input;
+    input[event.target.name] = event.target.value;
+
+    this.setState({
+      input,
+    });
+  };
 
   render() {
     let token = localStorage.getItem("token");
@@ -78,13 +90,15 @@ class SideBar extends React.Component {
                 type="text"
                 placeholder="Search"
                 className={classes.Search}
+                onChange={this.searchHandler}
+                name="keyword"
               />
               <InputGroup.Append>
                 <InputGroup.Text
                   type="submit"
                   className={classes.SearchIcon}
                   as={Link}
-                  to="/search"
+                  to={"/search/" + this.state.input.keyword}
                 >
                   <FontAwesomeIcon icon={faSearch} />
                 </InputGroup.Text>
@@ -128,13 +142,15 @@ class SideBar extends React.Component {
                 type="text"
                 placeholder="Search"
                 className={classes.Search}
+                name="keyword"
+                onChange={this.searchHandler}
               />
               <InputGroup.Append>
                 <InputGroup.Text
                   type="submit"
                   className={classes.SearchIcon}
                   as={Link}
-                  to="/search"
+                  to={"/search/" + this.state.input.keyword}
                 >
                   <FontAwesomeIcon icon={faSearch} />
                 </InputGroup.Text>

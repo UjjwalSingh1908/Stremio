@@ -4,6 +4,7 @@ import SideBar from "../Navigation/Sidebar";
 import VideoList from "../VideoList/VideoList";
 import { Col, Container, Row } from "react-bootstrap";
 import ServerService from "../../ServerService";
+import { BASE_URL } from "../../ServerService";
 
 class TrendingPage extends Component {
   state = {
@@ -30,12 +31,13 @@ class TrendingPage extends Component {
           key={data.id}
           id={data.id}
           title={data.title}
-          videourl={"https://6ed736a581f4.ngrok.io/" + data.videourl}
+          videourl={BASE_URL + data.videourl}
           channelname={data.user.name}
           profile={data.user.profilepic}
           views={data.viewsCount}
           date={data.createdAt}
           description={data.description}
+          thumbnail={BASE_URL + data.videoThumbnail}
         />
       );
     });

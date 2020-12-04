@@ -117,97 +117,94 @@ class Signup extends Component {
     return (
       <React.Fragment>
         <Navbar />
-        <section className={classes.page}>
+
+        <Container fluid className={classes.page}>
           {alert}
-          <Container fluid>
-            <Row>
-              <Col md={{ span: 4, offset: 4 }} className={classes.signupform}>
-                <div className={classes.heading}> SIGN UP </div>
-                <Form onSubmit={this.submitForm}>
-                  <Form.Group>
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter Name"
-                      name="name"
-                      required
-                      onChange={this.handleChange}
-                    />
-                  </Form.Group>
+          <Row>
+            <Col
+              md={{ span: 4, offset: 4 }}
+              xs={{ span: 10, offset: 1 }}
+              className={classes.signupform}
+            >
+              <div className={classes.heading}> SIGN UP </div>
+              <Form onSubmit={this.submitForm}>
+                <Form.Group>
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Name"
+                    name="name"
+                    required
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
 
-                  <Form.Group>
-                    <Form.Label>Channel Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter a unique Channel Name"
-                      name="channelName"
-                      required
-                      onChange={this.handleChange}
-                    />
-                  </Form.Group>
+                <Form.Group>
+                  <Form.Label>Channel Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter a unique Channel Name"
+                    name="channelName"
+                    required
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
 
-                  <Form.Group>
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter email"
-                      name="email"
-                      required
-                      onChange={this.handleChange}
-                    />
+                <Form.Group>
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    name="email"
+                    required
+                    onChange={this.handleChange}
+                  />
 
-                    <div className={classes.error}>
-                      {this.state.errors.email}
-                    </div>
-                  </Form.Group>
+                  <div className={classes.error}>{this.state.errors.email}</div>
+                </Form.Group>
 
-                  <Form.Group>
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      placeholder="Enter Password  (minimum 6 characters)"
-                      name="password"
-                      required
-                      onChange={this.handleChange}
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.passwordlen}
-                    </div>
-                  </Form.Group>
-
-                  <Form.Group>
-                    <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      placeholder="Re-Enter Password"
-                      name="confirmPassword"
-                      required
-                      onChange={this.handleChange}
-                    />
-                    <div className="text-danger">
-                      {this.state.errors.confirmpw}
-                    </div>
-                  </Form.Group>
-
-                  <Button
-                    variant="null"
-                    type="submit"
-                    className={classes.button}
-                  >
-                    Signup
-                  </Button>
-                  <div>
-                    Already Registered?{" "}
-                    <Link to="/login" className={classes.link}>
-                      {" "}
-                      Login{" "}
-                    </Link>{" "}
+                <Form.Group>
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Enter Password  (minimum 6 characters)"
+                    name="password"
+                    required
+                    onChange={this.handleChange}
+                  />
+                  <div className="text-danger">
+                    {this.state.errors.passwordlen}
                   </div>
-                </Form>
-              </Col>
-            </Row>
-          </Container>
-        </section>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label>Confirm Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Re-Enter Password"
+                    name="confirmPassword"
+                    required
+                    onChange={this.handleChange}
+                  />
+                  <div className="text-danger">
+                    {this.state.errors.confirmpw}
+                  </div>
+                </Form.Group>
+
+                <Button variant="null" type="submit" className={classes.button}>
+                  Signup
+                </Button>
+                <div>
+                  Already Registered?{" "}
+                  <Link to="/login" className={classes.link}>
+                    {" "}
+                    Login{" "}
+                  </Link>{" "}
+                </div>
+              </Form>
+            </Col>
+          </Row>
+        </Container>
       </React.Fragment>
     );
   }

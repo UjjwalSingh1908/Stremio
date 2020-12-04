@@ -3,11 +3,12 @@
   height: fit-content;
   min-height: 100%;
   color: #fff;
+  padding-left: 2rem;
 }
 
 .hover {
   padding: 0.5rem;
-  margin-right: 4rem;
+  margin-right: 2rem;
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
@@ -43,7 +44,7 @@
 .iconContainer {
   margin-top: 1.5rem;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
 }
 
 .title {
@@ -52,7 +53,6 @@
 }
 
 .hr {
-  width: 83%;
   background-color: #303030;
 }
 
@@ -68,7 +68,7 @@
 }
 
 .commentInput {
-  width: 52vw;
+  width: 40rem;
   box-shadow: none;
   color: #fff !important;
   background-color: #121212;

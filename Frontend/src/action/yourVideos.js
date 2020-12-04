@@ -1,25 +1,25 @@
 import { Constants } from "../action";
 import ServerService from "../ServerService";
 
-export const HomeVideos = (response) => {
+export const YourVideos = (response) => {
   return {
-    type: Constants.HOME_VIDEOS,
+    type: Constants.YOUR_VIDEOS,
     payLoad: response,
   };
 };
 
-export const AssyncHomeVideos = () => {
+export const AssyncYourVideos = () => {
   return (dispatch) => {
-    ServerService.Home()
+    ServerService.Profile(localStorage.getItem("id"))
       .then((response) => {
-        // console.log("Response:", response);
+        //console.log("Response:", response);
 
         if (
           response.status === 201 ||
           response.status === 200 ||
           response.status === 202
         ) {
-          dispatch(HomeVideos(response.data));
+          dispatch(YourVideos(response.data));
         }
       })
 

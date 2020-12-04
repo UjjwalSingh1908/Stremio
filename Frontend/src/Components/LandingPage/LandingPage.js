@@ -5,7 +5,7 @@ import VideoCard from "../VideoCard/VideoCard";
 import Alerts from "../Alerts/Alert";
 import { connect } from "react-redux";
 import { AssyncHomeVideos } from "../../action";
-
+import { BASE_URL } from "../../ServerService";
 import classes from "./LandingPage.css";
 
 class LandingPage extends Component {
@@ -44,7 +44,8 @@ class LandingPage extends Component {
             key={data.id}
             id={data.id}
             title={data.title}
-            videourl={"http://dfa417d1528d.ngrok.io " + data.videourl}
+            url={BASE_URL + data.videourl}
+            thumbnail={BASE_URL + data.videoThumbnail}
             channelname={data.user.name}
             profile={data.user.profilepic}
             views={data.viewsCount}

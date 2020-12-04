@@ -12,6 +12,7 @@ import WatchLater from "./Components/WatchLater'/WatchLater";
 import YourVideos from "./Components/YourVideos/YourVideos";
 import otherProfile from "./Components/ProfilePage/otherProfile";
 import MyProfile from "./Components/ProfilePage/MyProfile";
+import SearchResults from "./Components/SearchResults/SearchResults";
 
 class App extends Component {
   render() {
@@ -29,6 +30,7 @@ class App extends Component {
         <Route exact path="/videoplayer/:id" component={VideoPlayer} />
         <Route exact path="/profile/:id" component={otherProfile} />
         <Route exact path="/myprofile" component={MyProfile} />
+        <Route exact path="/search/:id" component={SearchResults} />
       </BrowserRouter>
     );
   }

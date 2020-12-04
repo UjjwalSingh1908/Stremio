@@ -4,3 +4,9 @@ body {
   font-family: sans-serif;
   font-size: 20px;
 }
+
+@media (max-width: 768px) {
+  html {
+    font-size: 65%;
+  }
+}

@@ -93,62 +93,61 @@ class Login extends Component {
     return (
       <React.Fragment>
         <Navbar />
-        <section className={classes.page}>
-          <Container fluid>
-            <Row>
-              {alert}
-              <Col md={{ span: 4, offset: 4 }} className={classes.loginform}>
-                <div className={classes.heading}> LOGIN </div>
-                <Form onSubmit={this.submitForm}>
-                  <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter email"
-                      name="email"
-                      required
-                      onChange={this.handleChange}
-                    />
 
-                    <div className={classes.error}>{this.state.errors.msg}</div>
-                  </Form.Group>
+        <Container fluid className={classes.page}>
+          <Row>
+            {alert}
+            <Col
+              md={{ span: 4, offset: 4 }}
+              xs={{ span: 10, offset: 1 }}
+              className={classes.loginform}
+            >
+              <div className={classes.heading}> LOGIN </div>
+              <Form onSubmit={this.submitForm}>
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    name="email"
+                    required
+                    onChange={this.handleChange}
+                  />
 
-                  <Form.Group
-                    controlId="formBasicPassword"
-                    style={{ marginTop: "2rem" }}
-                  >
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      required
-                      placeholder="Enter Password"
-                      name="password"
-                      onChange={this.handleChange}
-                    />
-                    <Link to="/forgotpassword" className={classes.link}>
-                      Forgot Password?
-                    </Link>
-                  </Form.Group>
+                  <div className={classes.error}>{this.state.errors.msg}</div>
+                </Form.Group>
 
-                  <Button
-                    variant="null"
-                    type="submit"
-                    className={classes.button}
-                  >
-                    Login
-                  </Button>
-                  <div>
-                    New User?{" "}
-                    <Link to="/signup" className={classes.link}>
-                      {" "}
-                      Signup{" "}
-                    </Link>{" "}
-                  </div>
-                </Form>
-              </Col>
-            </Row>
-          </Container>
-        </section>
+                <Form.Group
+                  controlId="formBasicPassword"
+                  style={{ marginTop: "2rem" }}
+                >
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    required
+                    placeholder="Enter Password"
+                    name="password"
+                    onChange={this.handleChange}
+                  />
+                  <Link to="/forgotpassword" className={classes.link}>
+                    Forgot Password?
+                  </Link>
+                </Form.Group>
+
+                <Button variant="null" type="submit" className={classes.button}>
+                  Login
+                </Button>
+                <div>
+                  New User?{" "}
+                  <Link to="/signup" className={classes.link}>
+                    {" "}
+                    Signup{" "}
+                  </Link>{" "}
+                </div>
+              </Form>
+            </Col>
+          </Row>
+        </Container>
       </React.Fragment>
     );
   }

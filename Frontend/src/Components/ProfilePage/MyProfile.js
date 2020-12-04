@@ -6,8 +6,23 @@ import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import SideBar from "../Navigation/Sidebar";
 import classes from "./Profile.css";
 import IconButton from "@material-ui/core/IconButton";
+import ServerService from "../../ServerService";
 
 class MyProfile extends Component {
+  state = {
+    input: {},
+  };
+
+  componentDidMount() {
+    ServerService.EditProfile()
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  }
+
   render() {
     return (
       <React.Fragment>

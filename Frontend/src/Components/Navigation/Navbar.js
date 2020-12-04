@@ -7,6 +7,21 @@ import { Link } from "react-router-dom";
 import classes from "./Navigation.css";
 
 class NavBar extends Component {
+  state = {
+    input: {
+      keyword: "",
+    },
+  };
+
+  searchHandler = (event) => {
+    let input = this.state.input;
+    input[event.target.name] = event.target.value;
+
+    this.setState({
+      input,
+    });
+  };
+
   render() {
     let token = localStorage.getItem("token");
     let Auth = false;
@@ -26,16 +41,18 @@ class NavBar extends Component {
               <FormControl
                 type="text"
                 placeholder="Search"
+                required
                 className={classes.Search}
+                name="keyword"
+                onChange={this.searchHandler}
               />
               <InputGroup.Append>
-                <InputGroup.Text
-                  type="submit"
-                  className={classes.SearchIcon}
-                  as={Link}
-                  to="/search"
-                >
-                  <FontAwesomeIcon icon={faSearch} />
+                <InputGroup.Text type="submit" className={classes.SearchIcon}>
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    as={Link}
+                    to={"/search/" + this.state.input.keyword}
+                  />
                 </InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>
@@ -73,15 +90,16 @@ class NavBar extends Component {
                 type="text"
                 placeholder="Search"
                 className={classes.Search}
+                name="keyword"
+                onChange={this.searchHandler}
               />
               <InputGroup.Append>
-                <InputGroup.Text
-                  type="submit"
-                  className={classes.SearchIcon}
-                  as={Link}
-                  to="/search"
-                >
-                  <FontAwesomeIcon icon={faSearch} />
+                <InputGroup.Text type="submit" className={classes.SearchIcon}>
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    as={Link}
+                    to={"/search/" + this.state.input.keyword}
+                  />
                 </InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>

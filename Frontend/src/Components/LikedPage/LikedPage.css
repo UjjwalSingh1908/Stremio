@@ -2,3 +2,7 @@
   background-color: #121212;
   min-height: 100vh;
 }
+
+.cardholder {
+  padding: 1.5rem;
+}

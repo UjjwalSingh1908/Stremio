@@ -19,7 +19,6 @@
   color: #fff;
   text-align: center;
   font-size: 1.2rem;
-  font-weight: bold;
 }
 
 .img {
@@ -42,4 +41,25 @@
   height: 2.4rem;
   margin-top: 1rem !important;
   margin-left: 65% !important;
+}
+
+.deleteicon {
+  cursor: pointer;
+}
+
+.deleteicon:hover {
+  color: #ccc;
+}
+
+.hover {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+  margin-left: 3rem;
+}
+
+.hover:active {
+  background-color: #474747;
 }

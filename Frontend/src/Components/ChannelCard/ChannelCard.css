@@ -1,0 +1,19 @@
+.channelName {
+  font-size: 1.7rem;
+  color: #fff;
+}
+
+.details {
+  font-size: 1rem;
+  color: #aaa;
+}
+
+.profileimage {
+  height: 8.4rem !important;
+  width: 8.4rem !important;
+  margin: auto;
+}
+
+.button {
+  margin-top: 2rem !important;
+}
