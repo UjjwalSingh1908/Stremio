@@ -24,16 +24,16 @@
 
 .signupButton {
   color: #fff;
-  background-color: #ff2f5b;
-  border: 2px solid #ff2f5b;
+  background-color: #f50057;
+  border: 2px solid #f50057;
   margin-right: 2.5rem;
   width: 8rem;
 }
 
 .logoutbutton {
   color: #fff;
-  background-color: #ff2f5b;
-  border: 2px solid #ff2f5b;
+  background-color: #f50057;
+  border: 2px solid #f50057;
   margin-right: 2rem;
   margin-left: 2rem;
   width: 5rem;
@@ -45,7 +45,7 @@
 .loginButton:active,
 .signupButton:active,
 .logoutbutton:active {
-  color: #ff2f5b;
+  color: #f50057;
   background-color: #fff;
   border: 2px solid #fff;
 }

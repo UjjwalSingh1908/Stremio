@@ -1,0 +1,45 @@
+.profileimage {
+  height: 5rem !important;
+  width: 5rem !important;
+  margin-right: 1rem;
+}
+
+.userdetails {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2rem;
+}
+
+.hr {
+  margin-top: 1rem !important ;
+  background-color: #303030;
+}
+
+.container {
+  color: #fff;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.img {
+  border-radius: 5px;
+  width: 8rem;
+  height: 6rem;
+  margin-right: 0.5rem;
+}
+
+.Link {
+  color: #fff;
+}
+
+.Link:hover {
+  text-decoration: none;
+  color: #fff;
+}
+
+.uploadIcon {
+  height: 2.4rem;
+  margin-top: 1rem !important;
+  margin-left: 65% !important;
+}

@@ -63,6 +63,7 @@ class Login extends Component {
             localStorage.setItem("token", res.data.accesstoken);
             localStorage.setItem("refreshtoken", res.data.refreshtoken);
             localStorage.setItem("profilepic", res.data.user.profilepic);
+            localStorage.setItem("id", res.data.user.id);
             this.setState({ redirect: "/" });
           } else {
             this.setState({

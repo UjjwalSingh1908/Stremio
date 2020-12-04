@@ -11,17 +11,11 @@ class VideoCard extends Component {
     return (
       <Card className={classes.videocard}>
         <div className={classes.playerwrapper}>
-          <Link
-            to={{
-              pathname: "/videoplayer",
-              state: { url: this.props.videourl, id: this.props.id },
-            }}
-          >
+          <Link to={"/videoplayer/" + this.props.id}>
             <ReactPlayer
               url={this.props.videourl}
               light="https://www.vidyard.com/media/video-marketing-1920x1080.jpg"
               className={classes.thumbnail}
-              playsinline
             />
           </Link>
         </div>

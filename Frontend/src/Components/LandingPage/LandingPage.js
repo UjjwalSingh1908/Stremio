@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Container, Row } from "react-bootstrap";
-import ServerService from "../../ServerService";
 import SideBar from "../Navigation/Sidebar";
 import VideoCard from "../VideoCard/VideoCard";
 import Alerts from "../Alerts/Alert";
+import { connect } from "react-redux";
+import { AssyncHomeVideos } from "../../action";
 
 import classes from "./LandingPage.css";
 
@@ -15,35 +16,43 @@ class LandingPage extends Component {
   };
 
   componentDidMount() {
-    ServerService.Home()
-      .then((res) => {
-        console.log(res);
-        this.setState({ videos: res.data.data });
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
+    // ServerService.Home()
+    //   .then((res) => {
+    //     console.log(res);
+    //     this.setState({ videos: res.data.data });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.response);
+    //   });
+
+    this.props.ShowHomeVideos();
   }
 
   render() {
+    let video = null;
+    let { home } = this.props;
+    if (home) console.log(home.home.data);
     let alert = <div style={{ lineHeight: "5", display: "none" }}>a</div>;
 
     if (this.state.text)
       alert = <Alerts type={this.state.type} text={this.state.text} />;
-    const video = this.state.videos.map((data) => {
-      return (
-        <VideoCard
-          key={data.id}
-          id={data.id}
-          title={data.title}
-          videourl={"https://stremio--app.herokuapp.com/" + data.videourl}
-          channelname={data.user.name}
-          profile={data.user.profilepic}
-          views={data.views}
-          date={data.createdAt}
-        />
-      );
-    });
+    if (home) {
+      video = home.home.data.map((data) => {
+        console.log(data);
+        return (
+          <VideoCard
+            key={data.id}
+            id={data.id}
+            title={data.title}
+            videourl={"http://dfa417d1528d.ngrok.io " + data.videourl}
+            channelname={data.user.name}
+            profile={data.user.profilepic}
+            views={data.viewsCount}
+            date={data.createdAt}
+          />
+        );
+      });
+    }
     return (
       <React.Fragment>
         <SideBar active="home">
@@ -59,4 +68,15 @@ class LandingPage extends Component {
   }
 }
 
-export default LandingPage;
+const mapStateToProps = (state) => ({
+  home: state.home,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    ShowHomeVideos: () => dispatch(AssyncHomeVideos()),
+    //sort: (a,b,c,d)  => dispatch(sort(a,b,c,d)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);
