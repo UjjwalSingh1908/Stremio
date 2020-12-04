@@ -23,6 +23,11 @@ const video=sequelize.define('video',{
         type:Sequelize.STRING,
         allowNull:false
     },
+    videoThumbnail:
+    {
+        type:Sequelize.STRING,
+        allowNull:false
+    },
     viewsCount:
     {
         type:Sequelize.INTEGER,
@@ -47,11 +52,14 @@ const video=sequelize.define('video',{
     {
         type:Sequelize.INTEGER,
         defaultValue:0
-    }
-    // thumbnail:
-    // {
-    //     type:Sequelize.STRING
-    // }
+    },
+    category:
+    {
+        type:Sequelize.STRING
+    },
+    //paranoid :true
+    //@DeletedAt
+
 
 });
 

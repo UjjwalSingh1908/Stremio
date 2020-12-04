@@ -6,28 +6,35 @@ const View=require('../models/view');
 const Like=require('../models/like');
 const Comment=require('../models/comment');
 const Reply=require('../models/replies');
+const watchlater = require('../models/watchLater');
 const Subscribe=require('../models/subscribe');
 
 exports.uploadvideo = asyncHandler(async (req, res, next) => {
 
-  const { title, description } = req.body;
-  const video = req.file;
+  const { title, description ,category} = req.body;
+  console.log(req.files);
+  const video = req.files.video[0];
+  const image = req.files.image[0];
 
   console.log(title);
   console.log(video);
+  console.log(image);
 
-  if (!title || !video) {
+  if (!title || !video || !image) {
     return res.status(422).json({ error: "please fill all the required fields" });
   }
 
   const videourl = (video.path).split('\\')[1];
+  const thumbnail = (image.path).split('\\')[1];
   console.log(videourl);
-
+  console.log(thumbnail);
   const videodata = await Video.create({
     title: title,
     description: description,
     videourl: videourl,
     userId: req.user.id,
+    videoThumbnail:thumbnail,
+    category:category
   });
   console.log(videodata);
   res.status(200).json({ success: true, data: videodata });
@@ -40,6 +47,7 @@ exports.home = asyncHandler(async (req,res,next)=>{
       "title",
       "description",
       "videourl",
+      "videoThumbnail",
       "userId",
       "createdAt",
       "viewsCount"
@@ -59,6 +67,20 @@ exports.getvideo = asyncHandler(async (req,res,next)=>{
         attributes: ["id", "name", "profilepic","channelName","subscriberCount"],
       },
     ],
+  });
+  const recommended = await Video.findAll({
+    attributes: [
+      "id",
+      "title",
+      "description",
+      "videourl",
+      "videoThumbnail",
+      "userId",
+      "createdAt",
+      "viewsCount"
+    ],
+    include: [{ model: User, attributes: ["id", "profilepic", "name","channelName"] }],
+    order: [["createdAt", "DESC"]],
   });
 
   if (!video) {
@@ -82,6 +104,15 @@ exports.getvideo = asyncHandler(async (req,res,next)=>{
         { videoId: req.params.id },
         { userId: req.user.id },
         { like: 1 },
+      ],
+    },
+  });
+
+  const addedtowatchlater = await watchlater.findOne({
+    where: {
+      [Op.and]: [
+        { videoId: req.params.id },
+        { userId: req.user.id }
       ],
     },
   });
@@ -117,6 +148,8 @@ exports.getvideo = asyncHandler(async (req,res,next)=>{
   video.setDataValue("isVideoMine", isVideoMine);
   video.setDataValue("isSubscribed", !!isSubscribed);
   video.setDataValue("isViewed", !!isViewed);
+  video.setDataValue("addedtowatchlater",!!addedtowatchlater);
+  video.setDataValue("recommended",recommended);
 
   res.status(200).json({ success: true, data: video });
   
@@ -288,8 +321,11 @@ exports.deleteVideo = asyncHandler (async (req,res,next)=>{
       videoId:video.id
     }
   });
+  if(comment){
   await comment.destroy();
-  await video.destroy();
+  }
+  if(video){
+  await video.destroy();}
 
   return res.status(200).json({message:"deleted"});  
 
@@ -319,4 +355,5 @@ exports.editVideo = asyncHandler (async(req,res,next)=>{
 
 
 });
+
 

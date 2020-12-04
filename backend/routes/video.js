@@ -11,24 +11,46 @@ const videoController = require("../controllers/video");
 
 //function to store the videos
 const storage = multer.diskStorage({
-    destination: (req,file, cb)=>{  //choose the destination for storing images
-        cb(null,"./uploads/");
+    destination: (req,file, cb)=>{  //choose the destination for storing videos and images
+        if(file.fieldname === "video")
+        {
+            cb(null,"./videos");
+        }
+        else if(file.fieldname === "image")
+        {
+            cb(null,"./images");
+        }
     },
     filename: (req,file,cb)=>{      //set filename as originalfilename 
         cb(null, file.originalname)
     }
 });
 
-//function to filter vedio type
+//function to filter vedio type && image type
 const fileFilter = (req,file,cb)=>{
     if(file.mimetype==="video/mp4"){
         cb(null,true);
-    } else{
+    }
+    else if(file.mimetype==="image/jpg" || file.mimetype==="image/jpeg" || file.mimetype==="image/png"){
+        cb(null,true);
+    }
+    else{
         cb(null,false)
     }
 };
 //to handle multiple files of data
-const imp = multer({storage:storage ,fileFilter:fileFilter}).single("video");
+const imp = multer({storage:storage ,fileFilter:fileFilter}).fields(
+    [
+        {
+        name:'video',
+        //maxCount:1
+        },
+        {
+        name:'image', 
+        //maxCount:1
+        }
+    ]
+);
 
 router.post('/uploadvideo',[isAuth,imp],videoController.uploadvideo);
 router.get('/home',videoController.home);

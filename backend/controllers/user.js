@@ -64,7 +64,7 @@ exports.history = asyncHandler(async (req, res, next) => {
     const videoIds = videoRelations.map((videoRelation) => videoRelation.videoId);
   
     const videos = await Video.findAll({
-      attributes: ["id", "title", "description", "createdAt", "videourl"],
+      attributes: ["id", "title", "description", "createdAt", "videourl","videoThumbnail"],
       include: {
         model: User,
         attributes: ["id", "name", "profilepic","channelName"],
@@ -100,7 +100,7 @@ exports.likedVideos = asyncHandler(async (req, res, next) => {
   const videoIds = videoRelations.map((videoRelation) => videoRelation.videoId);
 
   const videos = await Video.findAll({
-    attributes: ["id", "title", "description", "createdAt", "videourl"],
+    attributes: ["id", "title", "description", "createdAt", "videourl","videoThumbnail"],
     include: {
       model: User,
       attributes: ["id", "name", "profilepic", "channelName"],
@@ -137,7 +137,8 @@ exports.Trending =asyncHandler(async(req,res,next)=>{
       "userId",
       "createdAt",
       "viewsCount",
-      "likesCount"
+      "likesCount",
+      "videoThumbnail"
     ],
     include: [{ model: User, attributes: ["id", "profilepic", "name","channelName" ]}],
     order: [[sequelize.literal('COALESCE(likesCount, 0) + COALESCE(viewsCount, 0)'), 'DESC']]
@@ -159,7 +160,7 @@ exports.recommendedChannels = asyncHandler(async (req,res,next)=>{
       "email",
       "channelName",
       "profilepic",
-      "subscriberCount"
+      "subscriberCount",
     ],
     where :{
       id: {
@@ -202,7 +203,7 @@ exports.myfeed = asyncHandler ( async (req,res,next)=>{
     where : {
       userId : req.user.id
     },
-    include: [{ model: User, attributes: ["id", "profilepic", "name","channelName" ]}],
+    include: [{ model: User, attributes: ["id", "profilepic", "name","channelName" ,"videoThumbnail"]}],
     order :[
       ['createdAt','DESC']
     ]
@@ -239,26 +240,22 @@ exports.addToWatchLater = asyncHandler (async (req,res,next)=>{
   });
 
   if (added) {
-    return next(res.status(400).json({ message:"already added" }));
+    // return next(res.status(400).json({ message:"already added" }));
+    await added.destroy({
+      where:{
+        userId: req.user.id,
+        videoId: req.params.id,
+      }
+    });
+
+    return res.status(200).json({ message:"removed from watch later" });
   }
 
   await watch.create({
     userId: req.user.id,
     videoId: req.params.id,
   });
-  res.status(200).json({ success: true});
-});
-
-exports.removeFromWatchLater = asyncHandler(async(req,res,next)=>{
-  const watchLater = await watch.findByPk(req.params.id);
-
-  if(!watchLater)
-  {
-    return res.status(404).json({error:"no data found"});
-  }
-  await watchLater.destroy();
-
-  return res.status(200).json({success:true});
+  res.status(200).json({ messgae:"added to watch later" });
 });
 
 exports.myProfile = asyncHandler(async(req,res,next)=>{
@@ -320,7 +317,7 @@ exports.getWatchLater = asyncHandler(async (req, res, next) => {
   const videoIds = videoRelations.map((videoRelation) => videoRelation.videoId);
 
   const videos = await Video.findAll({
-    attributes: ["id", "title", "description", "createdAt", "videourl"],
+    attributes: ["id", "title", "description", "createdAt", "videourl","videoThumbnail"],
     include: {
       model: User,
       attributes: ["id", "name", "profilepic", "channelName"],
@@ -344,6 +341,67 @@ exports.getWatchLater = asyncHandler(async (req, res, next) => {
       return res.status(200).json({ success: true, data: videos });
     }
   });
+});
+
+exports.searchUser = asyncHandler(async(req,res,next)=>{
+  const tosearch=req.query.item;
+  if(!tosearch) 
+  {
+    return res.status(404).json({error:"please search sth"});
+  }
+
+  const userdata = await User.findAll({
+    where:{
+       channelName :{
+         [Op.ilike]: '%' + tosearch + '%'
+       }
+    }
+  });
+
+  const videodata = await Video.findAll({
+    where:{
+      [Op.or]:[
+        {
+          title:{
+            [Op.ilike]: '%' + tosearch + '%'
+          }
+        },
+        {
+          description:{
+            [Op.ilike]: '%' + tosearch + '%'
+          }
+        }
+      ]
+    }
+  });
+
+  // const categoryWiseData = await Video.findAll({
+  //   where:{
+  //     category : req.query.category
+  //   },
+  //   include: [{ model: User, attributes: ["id", "profilepic", "name","channelName" ]}],
+  //   order: [["createdAt", "DESC"]]
+  // });
+
+  userdata.setDataValue("videodata",videodata);
+  // userdata.setDataValue("Category",categoryWiseData);
+  return res.status(200).json({success:userdata});
+
+
+
+});
+
+exports.categoryWiseVideos = asyncHandler(async (req,res,next)=>{
+  const videodata = await Video.findAll({
+    where:{
+      
+      category : req.query.category
+    },
+    include: [{ model: User, attributes: ["id", "profilepic", "name","channelName" ]}],
+    order: [["createdAt", "DESC"]]
+  });
+
+  return res.status(200).json({success:videodata});
 });
 
 

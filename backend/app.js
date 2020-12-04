@@ -34,6 +34,8 @@ app.use((req, res, next) =>{
 
 
 app.use(express.static("uploads"))
+app.use(express.static("videos"))
+app.use(express.static("images"))
 
 //routes
 app.use(authRoutes);
@@ -61,7 +63,7 @@ watchLater.belongsTo(user, { foreignKey: "userId" });
 
 sequelize
     .sync(
-       // {force:true}
+      // {force:true}
     )
     .then(result => {
         //console.log(result);
