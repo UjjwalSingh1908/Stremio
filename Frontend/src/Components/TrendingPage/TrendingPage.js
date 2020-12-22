@@ -5,6 +5,15 @@ import VideoList from "../VideoList/VideoList";
 import { Col, Container, Row } from "react-bootstrap";
 import ServerService from "../../ServerService";
 import { BASE_URL } from "../../ServerService";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
+import { Route, Switch } from "react-router";
+import TrendingCategories from "./TrendingCategories";
+import gaming from "../../assets/gaming.png";
+import movies from "../../assets/movies.png";
+import music from "../../assets/music.png";
+import news from "../../assets/news.png";
+import { Link } from "react-router-dom";
 
 class TrendingPage extends Component {
   state = {
@@ -48,8 +57,76 @@ class TrendingPage extends Component {
           <section className={classes.section}>
             <Container>
               <Row>
-                <Col xs={10}>{video}</Col>
+                <Col xs={10}>
+                  <Switch>
+                    <Route
+                      path="/trending"
+                      exact
+                      component={() => {
+                        return (
+                          <Row>
+                            <Row>
+                              <Col xs={3}>
+                                <Link to="/trending/music">
+                                  <img
+                                    src={music}
+                                    alt=""
+                                    className={classes.category}
+                                  />
+                                </Link>{" "}
+                                <div className={classes.categoryName}>
+                                  Music
+                                </div>
+                              </Col>
+                              <Col xs={3}>
+                                <Link to="/trending/news">
+                                  <img
+                                    src={news}
+                                    alt=""
+                                    className={classes.category}
+                                  />
+                                </Link>
+                                <div className={classes.categoryName}>News</div>
+                              </Col>
+                              <Col xs={3}>
+                                <Link to="/trending/gaming">
+                                  <img
+                                    src={gaming}
+                                    alt=""
+                                    className={classes.category}
+                                  />
+                                </Link>
+                                <div className={classes.categoryName}>
+                                  Gaming
+                                </div>
+                              </Col>
+                              <Col xs={3}>
+                                <Link to="/trending/movies">
+                                  <img
+                                    src={movies}
+                                    alt=""
+                                    className={classes.category}
+                                  />
+                                </Link>
+                                <div className={classes.categoryName}>
+                                  Movies
+                                </div>
+                              </Col>
+                            </Row>
+                            <Row>{video}</Row>
+                          </Row>
+                        );
+                      }}
+                    />
+                    <Route
+                      path="/trending/:id"
+                      exact
+                      component={TrendingCategories}
+                    />
+                  </Switch>
+                </Col>
               </Row>
+              <Loader promiseTracker={usePromiseTracker} />
             </Container>
           </section>
         </SideBar>

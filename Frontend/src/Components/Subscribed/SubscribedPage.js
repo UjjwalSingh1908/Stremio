@@ -6,11 +6,13 @@ import VideoCard from "../VideoCard/VideoCard";
 import { Container, Row } from "react-bootstrap";
 import { BASE_URL } from "../../ServerService";
 import ChannelCard from "../ChannelCard/ChannelCard";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class SubscribedPage extends Component {
   state = {
-    videos: null,
-    channels: null,
+    videos: [],
+    channels: [],
   };
 
   componentDidMount() {
@@ -38,6 +40,7 @@ class SubscribedPage extends Component {
         <VideoCard
           key={data.id}
           id={data.id}
+          userId={data.user.id}
           title={data.title}
           videourl={BASE_URL + data.videourl}
           thumbnail={BASE_URL + data.videoThumbnail}
@@ -51,9 +54,17 @@ class SubscribedPage extends Component {
 
     let channels;
 
-    if (this.state.channels) {
+    if (this.state.channels.length) {
       channels = this.state.channels.map((data, index) => {
-        return <ChannelCard />;
+        return (
+          <ChannelCard
+            key={index}
+            name={data.channelName}
+            userId={data.id}
+            profilepic={BASE_URL + data.profilepic}
+            subscriberCount={data.subscriberCount}
+          />
+        );
       });
     }
 
@@ -62,7 +73,11 @@ class SubscribedPage extends Component {
         <SideBar active="subscribed">
           <section className={classes.section}>
             <Container fluid className={classes.cardholder}>
-              <Row>{videos}</Row>
+              <Row>
+                {videos}
+                {channels}
+              </Row>
+              <Loader promiseTracker={usePromiseTracker} />
             </Container>
           </section>
         </SideBar>

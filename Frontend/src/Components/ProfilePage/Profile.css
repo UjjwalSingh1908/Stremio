@@ -28,51 +28,6 @@
   margin-left: 60% !important;
 }
 
-.imagecontainer {
-  position: relative;
-  margin-left: 38%;
-  margin-bottom: 1rem;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 8rem;
-  width: 8rem;
-  border-radius: 50%;
-  opacity: 0;
-  transition: 0.3s ease;
-  background-color: #a32946;
-}
-
-.myprofileimage {
-  height: 8rem !important;
-  width: 8rem !important;
-}
-
-.icon {
-  color: white;
-  font-size: 2rem;
-  position: absolute;
-  top: 4rem;
-  left: 4rem;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.imagecontainer:hover .overlay {
-  opacity: 0.5;
-  cursor: pointer;
-}
-
-.input {
-  display: none;
-}
-
 .forminput {
   background-color: #959595;
   border: none;
@@ -83,4 +38,61 @@
   outline: none !important;
   border: 2px solid #f50057;
   box-shadow: none;
+}
+
+.myprofileimage {
+  height: 8rem !important;
+  width: 8rem !important;
+  margin: auto;
+}
+
+.videos {
+  font-size: 1.5rem;
+  padding: 2rem 4rem;
+}
+
+.imagecontainer {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.overlay {
+  position: absolute;
+  height: 8rem !important;
+  width: 8rem !important;
+  border-radius: 50%;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  color: white;
+  background-color: #a32946;
+}
+
+.icon {
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  top: 38%;
+  left: 38%;
+  cursor: pointer;
+}
+
+.imagecontainer:hover .overlay {
+  opacity: 0.5;
+}
+
+@media (max-width: 426px) {
+  .subscribe {
+    margin-left: 18% !important;
+  }
+  .profile {
+    padding: 3rem 1rem;
+  }
+  .videos {
+    padding: 2rem 2rem;
+  }
 }

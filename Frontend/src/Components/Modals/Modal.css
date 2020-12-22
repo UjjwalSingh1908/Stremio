@@ -36,3 +36,8 @@
 .input::placeholder {
   color: #fff;
 }
+
+.iconsize {
+  height: 5rem !important;
+  width: 5rem !important;
+}

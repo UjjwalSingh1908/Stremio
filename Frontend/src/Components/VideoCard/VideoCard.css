@@ -61,3 +61,10 @@
 .imagecontainer:hover .overlay {
   opacity: 0.5;
 }
+
+@media (max-width: 376px) {
+  .videocard {
+    margin: auto;
+    margin-bottom: 1rem;
+  }
+}

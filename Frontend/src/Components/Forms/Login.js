@@ -3,8 +3,10 @@ import Navbar from "../Navigation/Navbar";
 import { Link, Redirect } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import classes from "./Forms.css";
-import ServerService from "../../ServerService";
+import ServerService, { BASE_URL } from "../../ServerService";
 import Alerts from "../Alerts/Alert";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class Login extends Component {
   state = {
@@ -62,7 +64,10 @@ class Login extends Component {
           if (res.status === 200) {
             localStorage.setItem("token", res.data.accesstoken);
             localStorage.setItem("refreshtoken", res.data.refreshtoken);
-            localStorage.setItem("profilepic", res.data.user.profilepic);
+            localStorage.setItem(
+              "profilepic",
+              BASE_URL + res.data.user.profilepic
+            );
             localStorage.setItem("id", res.data.user.id);
             this.setState({ redirect: "/" });
           } else {
@@ -74,7 +79,7 @@ class Login extends Component {
         })
         .catch((err) => {
           console.log(err.response);
-          this.setState({ type: "error", text: err.response.data.message });
+          this.setState({ type: "error", text: err.response.data.error });
           //alert(err.response.data.error);
         });
     }
@@ -148,6 +153,7 @@ class Login extends Component {
             </Col>
           </Row>
         </Container>
+        <Loader promiseTracker={usePromiseTracker} />
       </React.Fragment>
     );
   }

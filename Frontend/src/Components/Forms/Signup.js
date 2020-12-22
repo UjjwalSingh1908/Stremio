@@ -6,6 +6,8 @@ import classes from "./Forms.css";
 
 import Alerts from "../Alerts/Alert";
 import ServerService from "../../ServerService";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class Signup extends Component {
   state = {
@@ -91,15 +93,14 @@ class Signup extends Component {
                 "We have sent u an email for verification! please verify your account to login...",
             });
             //this.setState({ redirect: "/login" });
-          } else if (res.status === 400) {
-            this.setState({
-              type: "error",
-              text: "hi",
-            });
           }
         })
         .catch((err) => {
           console.log(err.response);
+          this.setState({
+            type: "error",
+            text: err.response.data.error,
+          });
         });
     }
   };
@@ -205,6 +206,7 @@ class Signup extends Component {
             </Col>
           </Row>
         </Container>
+        <Loader promiseTracker={usePromiseTracker} />
       </React.Fragment>
     );
   }

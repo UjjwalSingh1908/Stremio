@@ -4,6 +4,8 @@ import VideoCard from "../VideoCard/VideoCard";
 import { Container, Row } from "react-bootstrap";
 import ServerService from "../../ServerService";
 import { BASE_URL } from "../../ServerService";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class WatchLater extends Component {
   state = {
@@ -26,6 +28,7 @@ class WatchLater extends Component {
         <VideoCard
           key={data.id}
           id={data.id}
+          userId={data.user.id}
           title={data.title}
           videourl={BASE_URL + data.videourl}
           thumbnail={BASE_URL + data.videoThumbnail}
@@ -49,6 +52,7 @@ class WatchLater extends Component {
               <Row>{videos}</Row>
             </Container>
           </section>
+          <Loader promiseTracker={usePromiseTracker} />
         </SideBar>
       </React.Fragment>
     );

@@ -2,3 +2,28 @@
   background-color: #121212;
   min-height: 100vh;
 }
+
+.category {
+  height: 5rem;
+  width: 5rem;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  margin: 1rem;
+  cursor: pointer;
+}
+
+.category:hover {
+  transform: scale(1.2);
+}
+
+.categoryName {
+  color: #aaa;
+  text-align: center;
+  font-weight: 500;
+}
+
+@media (max-width: 426px) {
+  .category {
+    margin: 0.5rem;
+  }
+}

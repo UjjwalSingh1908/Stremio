@@ -1,6 +1,6 @@
 import { Avatar } from "@material-ui/core";
 import React, { Component } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Table } from "react-bootstrap";
 import SideBar from "../Navigation/Sidebar";
 import VideoList from "./VideoList";
 import classes from "./YourVideos.css";
@@ -10,6 +10,8 @@ import UploadModal from "../Modals/UploadModal";
 import { connect } from "react-redux";
 import { AssyncYourVideos } from "../../action";
 import { BASE_URL } from "../../ServerService";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class YourVideos extends Component {
   state = {
@@ -29,6 +31,7 @@ class YourVideos extends Component {
         return (
           <VideoList
             key={index}
+            index={index}
             date={data.createdAt}
             comments={data.commentsCount}
             views={data.viewsCount}
@@ -48,13 +51,7 @@ class YourVideos extends Component {
             onHide={() => this.setState({ modalShow: false })}
           />
           <SideBar active="yourvideos">
-            <section
-              style={{
-                backgroundColor: "#121212",
-                minHeight: "100vh",
-                padding: "4rem",
-              }}
-            >
+            <section className={classes.section}>
               <div className={classes.userdetails}>
                 <Avatar
                   src={BASE_URL + yourvideos.yourvideos.data.profilepic}
@@ -87,25 +84,33 @@ class YourVideos extends Component {
                 </Button>
               </div>
 
-              <Container className={classes.container}>
+              <Container fluid className={classes.container}>
                 <hr className={classes.hr} />
                 <Row>
-                  <Col xs={3}>Video</Col>
-                  <Col xs={2}>Date</Col>
-                  <Col xs={1}>Views</Col>
-                  <Col xs={2}>Comments </Col>
-                  <Col xs={1}>Likes</Col>
-                  <Col xs={2}>Delete Video</Col>
+                  <Col xs={12}>
+                    <Table responsive="sm" borderless style={{ color: "#fff" }}>
+                      <thead>
+                        <tr>
+                          <th>Video </th>
+                          <th> Date</th>
+                          <th> Views</th>
+                          <th> Comments</th>
+                          <th> Likes</th>
+                          <th> Delete Video</th>
+                        </tr>
+                      </thead>
+                      <tbody>{videolist}</tbody>
+                    </Table>
+                  </Col>
                 </Row>
-                <hr className={classes.hr} />
-                {videolist}
               </Container>
             </section>
+            <Loader promiseTracker={usePromiseTracker} />
           </SideBar>
         </React.Fragment>
       );
     } else {
-      return <div></div>;
+      return <SideBar active="yourvideos"></SideBar>;
     }
   }
 }

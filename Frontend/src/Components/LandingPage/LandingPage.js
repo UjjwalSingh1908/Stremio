@@ -7,6 +7,8 @@ import { connect } from "react-redux";
 import { AssyncHomeVideos } from "../../action";
 import { BASE_URL } from "../../ServerService";
 import classes from "./LandingPage.css";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class LandingPage extends Component {
   state = {
@@ -43,6 +45,7 @@ class LandingPage extends Component {
           <VideoCard
             key={data.id}
             id={data.id}
+            userId={data.userId}
             title={data.title}
             url={BASE_URL + data.videourl}
             thumbnail={BASE_URL + data.videoThumbnail}
@@ -61,6 +64,7 @@ class LandingPage extends Component {
             <Container fluid className={classes.cardholder}>
               {alert}
               <Row>{video}</Row>
+              <Loader promiseTracker={usePromiseTracker} />
             </Container>
           </section>
         </SideBar>

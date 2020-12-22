@@ -1,3 +1,9 @@
+.section {
+  background-color: #121212;
+  min-height: 100vh;
+  padding: 4rem;
+}
+
 .profileimage {
   height: 5rem !important;
   width: 5rem !important;
@@ -17,7 +23,7 @@
 
 .container {
   color: #fff;
-  text-align: center;
+
   font-size: 1.2rem;
 }
 
@@ -62,4 +68,33 @@
 
 .hover:active {
   background-color: #474747;
+}
+
+.row {
+  margin: 1rem;
+}
+
+@media (max-width: 426px) {
+  .row {
+    margin-right: 0 !important;
+    padding-right: 0%;
+  }
+  .uploadIcon {
+    margin-left: 30% !important;
+  }
+  .section {
+    padding: 1rem;
+    padding-top: 2rem;
+  }
+  .img {
+    width: 4rem;
+    height: 3rem;
+    margin: 0%;
+  }
+}
+
+@media (max-width: 321px) {
+  .uploadIcon {
+    margin-left: 25% !important;
+  }
 }

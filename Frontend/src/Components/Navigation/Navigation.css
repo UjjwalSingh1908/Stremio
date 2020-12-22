@@ -53,12 +53,16 @@
 .Search {
   background-color: #565656;
   border-color: #565656;
+  border-top-right-radius: 0% !important;
+  border-bottom-right-radius: 0% !important;
 }
 
 .SearchIcon {
   background-color: #7e7e7e;
   border-color: #7e7e7e;
   color: #ffffff;
+  border-bottom-left-radius: 0%;
+  border-top-left-radius: 0%;
 }
 .SearchIcon:hover {
   color: #fff !important;
@@ -141,6 +145,10 @@
   margin-left: 30%;
 }
 
+.profile:hover {
+  box-shadow: 0px 0px 0px 2px #f50057 !important;
+}
+
 @media (max-width: 768px) {
   .InputGroup {
     width: 20rem !important;
@@ -150,10 +158,12 @@
 
 @media (max-width: 426px) {
   .InputGroup {
-    width: 9rem !important;
+    width: 7rem !important;
     margin-left: 0.5rem;
   }
-  .signupButton {
+
+  .signupButton,
+  .logoutbutton {
     width: 5rem;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
@@ -164,5 +174,11 @@
     width: 4rem;
     margin-left: 0.5rem;
     margin-right: 0 !important;
+  }
+
+  .profile {
+    height: 2.5rem !important;
+    width: 2.5rem !important;
+    margin: auto !important;
   }
 }

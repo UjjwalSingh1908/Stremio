@@ -7,6 +7,11 @@ const yourVideos = (state = initialState, action) => {
     case Constants.YOUR_VIDEOS:
       return { ...state, yourvideos: action.payLoad };
 
+    case Constants.DELETE_VIDEOS:
+      console.log(action.payLoad);
+      state.yourvideos.data.videodata.splice(action.payLoad, 1);
+      console.log(state);
+      return { ...state };
     default:
       return state;
   }

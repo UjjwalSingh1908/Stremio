@@ -8,6 +8,13 @@ export const YourVideos = (response) => {
   };
 };
 
+export const DeleteVideos = (index) => {
+  return {
+    type: Constants.DELETE_VIDEOS,
+    payLoad: index,
+  };
+};
+
 export const AssyncYourVideos = () => {
   return (dispatch) => {
     ServerService.Profile(localStorage.getItem("id"))

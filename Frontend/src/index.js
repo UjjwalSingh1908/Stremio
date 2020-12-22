@@ -4,23 +4,22 @@ import "./index.css";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { usePromiseTracker } from "react-promise-tracker";
-import Loader from "react-promise-loader";
+
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import rootReducer from "./reducer";
+import { BrowserRouter } from "react-router-dom";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
-ReactDOM.render(
+const app = (
   <Provider store={store}>
-    <div>
+    <BrowserRouter>
       <App />
-      <Loader promiseTracker={usePromiseTracker} />
-    </div>
-    ,
-  </Provider>,
-  document.getElementById("root")
+    </BrowserRouter>
+  </Provider>
 );
+
+ReactDOM.render(app, document.getElementById("root"));
 registerServiceWorker();

@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import classes from "./Modal.css";
 import { Form, Modal } from "react-bootstrap";
 import { Button } from "@material-ui/core";
+import ServerService from "../../ServerService";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class UploadModal extends Component {
   state = {
@@ -26,20 +29,26 @@ class UploadModal extends Component {
   submitHandler = (event) => {
     event.preventDefault();
     const data = {
-      title: this.state.title,
-      description: this.state.description,
-      category: this.state.category,
+      title: this.state.input.title,
+      description: this.state.input.description,
+      category: this.state.input.category,
       image: this.state.image,
       video: this.state.video,
     };
-    console.log(data);
 
     const fd = new FormData();
 
     for (let formElement in data) {
       fd.append(formElement, data[formElement]);
-      console.log(formElement, data[formElement]);
+      // console.log(formElement, data[formElement]);
     }
+    ServerService.UploadVideo(fd)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
   };
 
   imageHandler = (event) => {
@@ -59,6 +68,7 @@ class UploadModal extends Component {
         onHide={this.props.onHide}
         contentClassName={classes.dialog}
       >
+        <Loader promiseTracker={usePromiseTracker} />
         <Modal.Header
           closeButton
           style={{
@@ -115,6 +125,7 @@ class UploadModal extends Component {
 
             <Form.Group>
               <Form.File
+                accept="image/jpeg"
                 id="exampleFormControlFile1"
                 label="Video Thumbnail"
                 onChange={this.imageHandler}
@@ -123,6 +134,7 @@ class UploadModal extends Component {
             </Form.Group>
             <Form.Group>
               <Form.File
+                accept="video/mp4"
                 id="exampleFormControlFile1"
                 label="Video"
                 required

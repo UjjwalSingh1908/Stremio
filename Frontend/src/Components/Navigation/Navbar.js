@@ -22,6 +22,10 @@ class NavBar extends Component {
     });
   };
 
+  submitHandler = (event) => {
+    event.preventDefault();
+  };
+
   render() {
     let token = localStorage.getItem("token");
     let Auth = false;
@@ -36,24 +40,27 @@ class NavBar extends Component {
           <Navbar.Brand as={Link} to="/" className={classes.logo}>
             STREMIO
           </Navbar.Brand>
-          <Form inline>
+          <Form inline onSubmit={this.submitHandler}>
             <InputGroup className={classes.InputGroup}>
               <FormControl
                 type="text"
                 placeholder="Search"
-                required
                 className={classes.Search}
                 name="keyword"
                 onChange={this.searchHandler}
               />
               <InputGroup.Append>
-                <InputGroup.Text type="submit" className={classes.SearchIcon}>
+                <Button
+                  variant="null"
+                  type="submit"
+                  className={classes.SearchIcon}
+                >
                   <FontAwesomeIcon
                     icon={faSearch}
                     as={Link}
                     to={"/search/" + this.state.input.keyword}
                   />
-                </InputGroup.Text>
+                </Button>
               </InputGroup.Append>
             </InputGroup>
           </Form>
@@ -84,7 +91,7 @@ class NavBar extends Component {
           <Navbar.Brand as={Link} to="/" className={classes.logo}>
             STREMIO
           </Navbar.Brand>
-          <Form inline>
+          <Form inline onSubmit={this.submitHandler}>
             <InputGroup className={classes.InputGroup}>
               <FormControl
                 type="text"
@@ -93,14 +100,19 @@ class NavBar extends Component {
                 name="keyword"
                 onChange={this.searchHandler}
               />
+
               <InputGroup.Append>
-                <InputGroup.Text type="submit" className={classes.SearchIcon}>
+                <Button
+                  variant="null"
+                  type="submit"
+                  className={classes.SearchIcon}
+                >
                   <FontAwesomeIcon
                     icon={faSearch}
                     as={Link}
                     to={"/search/" + this.state.input.keyword}
                   />
-                </InputGroup.Text>
+                </Button>
               </InputGroup.Append>
             </InputGroup>
           </Form>

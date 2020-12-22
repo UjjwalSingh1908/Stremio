@@ -17,6 +17,8 @@ import dateFormat from "dateformat";
 import Comment from "../Comments/Comment";
 import RecommendedVideo from "../RecommendedVideos/RecommendedVideo";
 import { BASE_URL } from "../../ServerService";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class VideoPlayer extends Component {
   state = {
@@ -252,33 +254,38 @@ class VideoPlayer extends Component {
         />
         <Container fluid className={classes.section}>
           <Row>
-            <Col xs={8}>
+            <Col xs={12} md={8}>
               <Row>
                 <Col xs={12}>
-                  <ReactPlayer
-                    key={this.state.data.url}
-                    url={BASE_URL + this.state.data.videourl}
-                    playing
-                    className={classes.videoplayer}
-                    width="100%"
-                    height="60vh"
-                    style={{ marginTop: "2rem" }}
-                    controls
-                  />
+                  <div className={classes.playerwrapper}>
+                    <ReactPlayer
+                      key={this.state.data.url}
+                      url={BASE_URL + this.state.data.videourl}
+                      playing
+                      className={classes.videoplayer}
+                      width="100%"
+                      height="100%"
+                      style={{ marginTop: "2rem" }}
+                      controls
+                    />
+                  </div>
                 </Col>
               </Row>
               <Row>
-                <Col xs={9} style={{ marginTop: "1rem" }}>
+                <Col xs={7} md={9} style={{ marginTop: "1rem" }}>
                   <div>{this.state.data.title}</div>
+
                   <div>
-                    <div>
-                      {this.state.views} Views .{" "}
-                      {dateFormat(this.state.data.createdAt, "mmmm dS, yyyy")}
-                    </div>
+                    {this.state.views} Views .{" "}
+                    {dateFormat(this.state.data.createdAt, "mmmm dS, yyyy")}
+                    <br />
+                    <br />
+                    <b>Description</b> <br />
+                    {this.state.data.description}
                   </div>
                 </Col>
 
-                <Col xs={3} className={classes.iconContainer}>
+                <Col xs={5} md={3} className={classes.iconContainer}>
                   <div className={classes.hover} onClick={this.toggleLike}>
                     {this.state.liked ? (
                       <FontAwesomeIcon
@@ -323,7 +330,7 @@ class VideoPlayer extends Component {
               <Row>
                 <Col xs={9}>
                   <div className={classes.avatar}>
-                    <Avatar src={this.state.profilepic} />{" "}
+                    <Avatar src={BASE_URL + this.state.profilepic} />{" "}
                     <span style={{ paddingLeft: "0.5rem" }}>
                       {this.state.channelName}
                       <br /> {this.state.subscribersCount} Subscribers
@@ -364,7 +371,7 @@ class VideoPlayer extends Component {
                       marginTop: "1rem",
                     }}
                   >
-                    <Avatar src={localStorage.getItem("profilepic")} />
+                    <Avatar src={BASE_URL + this.state.profilepic} />
                     <form
                       onSubmit={this.submitComment}
                       style={{ display: "flex" }}
@@ -380,6 +387,7 @@ class VideoPlayer extends Component {
                         type="submit"
                         variant="contained"
                         color="secondary"
+                        className={classes.commentbutton}
                       >
                         COMMENT
                       </Button>
@@ -392,11 +400,13 @@ class VideoPlayer extends Component {
                 <Col xs={12}>{comments}</Col>
               </Row>
             </Col>
-            <Col xs={4} style={{ padding: "2rem" }}>
+            <Col xs={12} md={4} style={{ padding: "2rem" }}>
+              <div style={{ fontSize: "1.5rem" }}>Recommended For You</div>
               {RecommendedVideos}
             </Col>
           </Row>
         </Container>
+        <Loader promiseTracker={usePromiseTracker} />
       </SideBar>
     );
   }

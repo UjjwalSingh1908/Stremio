@@ -1,6 +1,7 @@
 import { Avatar, Button } from "@material-ui/core";
 import React, { Component } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import ServerService from "../../ServerService";
 import classes from "./ChannelCard.css";
 
@@ -13,7 +14,7 @@ class ChannelCard extends Component {
     let localSaved = this.state.subscribed;
     localSaved = !localSaved;
     this.setState({ subscribed: localSaved }, () => {
-      ServerService.Subscribe(this.state.userId)
+      ServerService.Subscribe(this.props.userId)
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
@@ -38,18 +39,28 @@ class ChannelCard extends Component {
       <React.Fragment>
         <Container>
           <Row>
-            <Col xs={4}>
-              <Avatar src=" " className={classes.profileimage}></Avatar>
+            <Col md={4} xs={2}>
+              <Link
+                to={"profile/" + this.props.userId}
+                className={classes.link}
+              >
+                <Avatar
+                  src={this.props.profilepic}
+                  className={classes.profileimage}
+                />
+              </Link>
             </Col>
-            <Col xs={6}>
-              <span className={classes.channelName}>Channel Name</span> <br />
+            <Col md={5} xs={6} className={classes.content}>
+              <span className={classes.channelName}>{this.props.name}</span>{" "}
+              <br />
               <span className={classes.details}>
                 {" "}
-                24.5M Subscribers . 172 Videos <br />
-                Description
+                {this.props.subscriberCount} Subscribers <br />
+                {this.props.about}
               </span>
             </Col>
-            <Col xs={2}>
+
+            <Col md={3} xs={3}>
               {this.state.subscribed ? (
                 <Button
                   variant="contained"
@@ -70,6 +81,8 @@ class ChannelCard extends Component {
               )}
             </Col>
           </Row>
+
+          <hr className={classes.hr} />
         </Container>
       </React.Fragment>
     );

@@ -1,8 +1,8 @@
 import axios from "axios";
 import { trackPromise } from "react-promise-tracker";
 
-export const BASE_URL = "https://stremio--app.herokuapp.com/";
-//const BASE_URL = "https://b1c8ce3f26f4.ngrok.io/";
+//export const BASE_URL = "https://stremio--app.herokuapp.com/";
+export const BASE_URL = "https://1be2a8c8add7.ngrok.io/";
 
 class ServerService {
   Signup(data) {
@@ -171,12 +171,31 @@ class ServerService {
     );
   }
 
-  EditProfile() {
+  EditProfile(data) {
     return trackPromise(
-      axios.post("https://6c83e9c8572a.ngrok.io/" + "editprofile", {
+      axios.post(BASE_URL + "editprofile", data, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
-          "Access-Control-Allow-Origin": "yes",
+        },
+      })
+    );
+  }
+
+  Search(query) {
+    return trackPromise(
+      axios.get(BASE_URL + "search?item=" + query, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+    );
+  }
+
+  Category(query) {
+    return trackPromise(
+      axios.get(BASE_URL + "trending/category?" + query, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
       })
     );

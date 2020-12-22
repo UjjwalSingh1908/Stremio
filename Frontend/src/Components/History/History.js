@@ -5,6 +5,8 @@ import classes from "./History.css";
 import { Container, Row } from "react-bootstrap";
 import VideoCard from "../VideoCard/VideoCard";
 import { BASE_URL } from "../../ServerService";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class HistoryPage extends Component {
   state = {
@@ -28,6 +30,7 @@ class HistoryPage extends Component {
         <VideoCard
           key={data.id}
           id={data.id}
+          userId={data.user.id}
           title={data.title}
           videourl={BASE_URL + data.videourl}
           thumbnail={BASE_URL + data.videoThumbnail}
@@ -46,6 +49,7 @@ class HistoryPage extends Component {
               <Row>{videos}</Row>
             </Container>
           </section>
+          <Loader promiseTracker={usePromiseTracker} />
         </SideBar>
       </React.Fragment>
     );
