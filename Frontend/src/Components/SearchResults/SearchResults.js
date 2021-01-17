@@ -76,7 +76,7 @@ class SearchResults extends Component {
       );
     });
     return (
-      <React.Fragment>
+      <Sidebar>
         <section
           style={{
             backgroundColor: "#121212",
@@ -88,7 +88,7 @@ class SearchResults extends Component {
             <Row>{videos}</Row>
           </Container>
         </section>
-      </React.Fragment>
+      </Sidebar>
     );
   }
 }
