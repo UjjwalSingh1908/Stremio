@@ -10,11 +10,33 @@
   /* border: 1px solid #ccc; */
 }
 
-.playerwrapper {
+.imagecontainer {
+  position: relative;
   border-radius: 10px;
   overflow: hidden;
-  height: 10rem;
-  width: 17.5rem;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  color: white;
+  background-color: #a32946;
+}
+
+.icon {
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  top: 40%;
+  left: 45%;
+}
+
+.imagecontainer:hover .overlay {
+  opacity: 0.5;
 }
 
 .content {

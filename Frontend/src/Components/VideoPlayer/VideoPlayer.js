@@ -15,9 +15,14 @@ import { Avatar, Button } from "@material-ui/core";
 import ServerService from "../../ServerService";
 import dateFormat from "dateformat";
 import Comment from "../Comments/Comment";
+import RecommendedVideo from "../RecommendedVideos/RecommendedVideo";
+import { BASE_URL } from "../../ServerService";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class VideoPlayer extends Component {
   state = {
+    id: "",
     comments: [],
     addcomment: "",
     saved: false,
@@ -33,6 +38,7 @@ class VideoPlayer extends Component {
     commentCount: 0,
     isVideoMine: false,
     data: [],
+    recommended: [],
   };
 
   addComment = (e) => {
@@ -51,9 +57,9 @@ class VideoPlayer extends Component {
     let localSaved = this.state.saved;
     localSaved = !localSaved;
     let videoId = this.state.data.id;
-    ServerService.WatchLater().then((res) => {
+    this.setState({ saved: localSaved });
+    ServerService.AddToWatchLater(videoId).then((res) => {
       console.log(res);
-      if (res.status === 200) this.setState({ saved: localSaved });
     });
   };
 
@@ -76,7 +82,7 @@ class VideoPlayer extends Component {
           }
         })
         .catch((err) => {
-          err.response;
+          console.log(err.response);
         });
     });
   };
@@ -103,6 +109,7 @@ class VideoPlayer extends Component {
     const data = {
       text: this.state.addcomment,
     };
+    document.getElementById("comment").value = "";
     ServerService.Comment(this.state.data.id, data).then((res) => {
       console.log(res);
       if (res.status === 200) {
@@ -126,29 +133,88 @@ class VideoPlayer extends Component {
 
   componentDidMount() {
     let id = this.props.match.params.id;
+    this.setState({ id: id });
     ServerService.VideoDetails(id)
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
-          this.setState({
-            data: res.data.data,
-            liked: res.data.data.isLiked,
-            likesCount: res.data.data.likesCount,
-            profilepic: res.data.data.user.profilepic,
-            channelName: res.data.data.user.channelName,
-            subscribed: res.data.data.isSubscribed,
-            userId: res.data.data.user.id,
-            subscribersCount: res.data.data.subscribersCount,
-            views: res.data.data.viewsCount,
-            comments: res.data.data.comments,
-            commentCount: res.data.data.commentsCount,
-            isVideoMine: res.data.data.isVideoMine,
-          });
+          this.setState(
+            {
+              data: res.data.data,
+              liked: res.data.data.isLiked,
+              likesCount: res.data.data.likesCount,
+              profilepic: res.data.data.user.profilepic,
+              channelName: res.data.data.user.channelName,
+              subscribed: res.data.data.isSubscribed,
+              userId: res.data.data.user.id,
+              subscribersCount: res.data.data.subscribersCount,
+              views: res.data.data.viewsCount,
+              comments: res.data.data.comments,
+              commentCount: res.data.data.commentsCount,
+              isVideoMine: res.data.data.isVideoMine,
+              saved: res.data.data.addedtowatchlater,
+              recommended: res.data.data.recommended,
+            },
+            () => {
+              let videoId = this.state.data.id;
+              ServerService.View(videoId)
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log(err.response);
+                });
+            }
+          );
         }
       })
       .catch((err) => {
         console.log(err.response);
       });
+  }
+
+  componentDidUpdate() {
+    let id = this.props.match.params.id;
+    if (id != this.state.id) {
+      this.setState({ id: id });
+      ServerService.VideoDetails(id)
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            this.setState(
+              {
+                data: res.data.data,
+                liked: res.data.data.isLiked,
+                likesCount: res.data.data.likesCount,
+                profilepic: res.data.data.user.profilepic,
+                channelName: res.data.data.user.channelName,
+                subscribed: res.data.data.isSubscribed,
+                userId: res.data.data.user.id,
+                subscribersCount: res.data.data.subscribersCount,
+                views: res.data.data.viewsCount,
+                comments: res.data.data.comments,
+                commentCount: res.data.data.commentsCount,
+                isVideoMine: res.data.data.isVideoMine,
+                saved: res.data.data.addedtowatchlater,
+                recommended: res.data.data.recommended,
+              },
+              () => {
+                let videoId = this.state.data.id;
+                ServerService.View(videoId)
+                  .then((res) => {
+                    console.log(res);
+                  })
+                  .catch((err) => {
+                    console.log(err.response);
+                  });
+              }
+            );
+          }
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    }
   }
 
   render() {
@@ -164,6 +230,22 @@ class VideoPlayer extends Component {
       );
     });
 
+    const RecommendedVideos = this.state.recommended.map((data, index) => {
+      return (
+        <RecommendedVideo
+          key={index}
+          videoId={data.id}
+          channelName={data.user.channelName}
+          title={data.title}
+          date={data.createdAt}
+          url={data.videourl}
+          thumbnail={data.videoThumbnail}
+          userId={data.user.id}
+          views={data.views}
+        />
+      );
+    });
+
     return (
       <SideBar>
         <ShareModal
@@ -172,133 +254,159 @@ class VideoPlayer extends Component {
         />
         <Container fluid className={classes.section}>
           <Row>
-            <Col xs={{ span: 10, offset: 1 }}>
-              <ReactPlayer
-                url={
-                  "https://dfa417d1528d.ngrok.io/" + this.state.data.videourl
-                }
-                playing
-                className={classes.videoplayer}
-                width="100%"
-                height="70vh"
-                style={{ marginTop: "3rem" }}
-                controls
-              />
-            </Col>
+            <Col xs={12} md={8}>
+              <Row>
+                <Col xs={12}>
+                  <div className={classes.playerwrapper}>
+                    <ReactPlayer
+                      key={this.state.data.url}
+                      url={BASE_URL + this.state.data.videourl}
+                      playing
+                      className={classes.videoplayer}
+                      width="100%"
+                      height="100%"
+                      style={{ marginTop: "2rem" }}
+                      controls
+                    />
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={7} md={9} style={{ marginTop: "1rem" }}>
+                  <div>{this.state.data.title}</div>
 
-            <Col xs={{ span: 5, offset: 1 }} style={{ marginTop: "1rem" }}>
-              <div>{this.state.data.title}</div>
-              <div>
-                <div>
-                  {this.state.views} Views .{" "}
-                  {dateFormat(this.state.data.createdAt, "mmmm dS, yyyy")}
-                </div>
-              </div>
-            </Col>
+                  <div>
+                    {this.state.views} Views .{" "}
+                    {dateFormat(this.state.data.createdAt, "mmmm dS, yyyy")}
+                    <br />
+                    <br />
+                    <b>Description</b> <br />
+                    {this.state.data.description}
+                  </div>
+                </Col>
 
-            <Col xs={5} className={classes.iconContainer}>
-              <div className={classes.hover}>
-                <FontAwesomeIcon
-                  icon={faShare}
-                  onClick={() => this.setState({ modalShow: true })}
-                  className={classes.iconInactive}
-                />
-                <span className={classes.title}>SHARE</span>
-              </div>
-              <div className={classes.hover} onClick={this.toggleSaved}>
-                {this.state.saved ? (
-                  <FontAwesomeIcon
-                    icon={faClock}
-                    className={classes.iconActive}
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faClock}
-                    className={classes.iconInactive}
-                  />
-                )}
-                <span className={classes.title}>LATER</span>
-              </div>
+                <Col xs={5} md={3} className={classes.iconContainer}>
+                  <div className={classes.hover} onClick={this.toggleLike}>
+                    {this.state.liked ? (
+                      <FontAwesomeIcon
+                        icon={faHeart}
+                        className={classes.iconActive}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faHeartBroken}
+                        className={classes.iconInactive}
+                      />
+                    )}
+                    <span className={classes.title}>
+                      {this.state.likesCount}
+                    </span>
+                  </div>
+                  <div className={classes.hover} onClick={this.toggleSaved}>
+                    {this.state.saved ? (
+                      <FontAwesomeIcon
+                        icon={faClock}
+                        className={classes.iconActive}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faClock}
+                        className={classes.iconInactive}
+                      />
+                    )}
+                  </div>
+                  <div className={classes.hover}>
+                    <FontAwesomeIcon
+                      icon={faShare}
+                      onClick={() => this.setState({ modalShow: true })}
+                      className={classes.iconInactive}
+                    />
+                  </div>
+                </Col>
+              </Row>
 
-              <div className={classes.hover} onClick={this.toggleLike}>
-                {this.state.liked ? (
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    className={classes.iconActive}
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faHeartBroken}
-                    className={classes.iconInactive}
-                  />
-                )}
-                <span className={classes.title}>{this.state.likesCount}</span>
-              </div>
-            </Col>
-          </Row>
-          <hr className={classes.hr} />
-          <Row>
-            <Col xs={{ span: 5, offset: 1 }}>
-              <div className={classes.avatar}>
-                <Avatar src={this.state.profilepic} />{" "}
-                <span style={{ paddingLeft: "0.5rem" }}>
-                  {this.state.channelName}
-                  <br /> {this.state.subscribersCount} Subscribers
-                </span>
-              </div>
-            </Col>
-            <Col xs={5}>
-              {this.state.isVideoMine ? null : this.state.subscribed ? (
-                <Button
-                  variant="contained"
-                  style={{ marginLeft: "60%" }}
-                  onClick={this.toggleSubscribe}
-                >
-                  SUBSCRIBED
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  style={{ marginLeft: "60%" }}
-                  onClick={this.toggleSubscribe}
-                >
-                  SUBSCRIBE
-                </Button>
-              )}
-            </Col>
-          </Row>
-          <hr className={classes.hr} />
-          <Row style={{ marginTop: "2rem" }}>
-            <Col xs={{ span: 10, offset: 1 }}>
-              <span>{this.state.commentCount} Comments</span> <br />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  marginTop: "1rem",
-                }}
-              >
-                <Avatar src={localStorage.getItem("profilepic")} />
-                <form onSubmit={this.submitComment}>
-                  <input
-                    type="text"
-                    className={classes.commentInput}
-                    placeholder="Add a public comment"
-                    onChange={this.addComment}
-                  />
-                  <Button type="submit" variant="contained" color="secondary">
-                    COMMENT
-                  </Button>
-                </form>
-              </div>
-            </Col>
-          </Row>
+              <hr className={classes.hr} />
 
-          <Row style={{ marginTop: "2rem" }}>
-            <Col xs={{ span: 10, offset: 1 }}>{comments}</Col>
+              <Row>
+                <Col xs={9}>
+                  <div className={classes.avatar}>
+                    <Avatar src={BASE_URL + this.state.profilepic} />{" "}
+                    <span style={{ paddingLeft: "0.5rem" }}>
+                      {this.state.channelName}
+                      <br /> {this.state.subscribersCount} Subscribers
+                    </span>
+                  </div>
+                </Col>
+                <Col xs={3}>
+                  {this.state.isVideoMine ? null : this.state.subscribed ? (
+                    <Button
+                      variant="contained"
+                      style={{ float: "right" }}
+                      onClick={this.toggleSubscribe}
+                    >
+                      SUBSCRIBED
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      style={{ float: "right" }}
+                      onClick={this.toggleSubscribe}
+                    >
+                      SUBSCRIBE
+                    </Button>
+                  )}
+                </Col>
+              </Row>
+
+              <hr className={classes.hr} />
+
+              <Row style={{ marginTop: "2rem" }}>
+                <Col xs={12}>
+                  <span>{this.state.commentCount} Comments</span> <br />
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      marginTop: "1rem",
+                    }}
+                  >
+                    <Avatar src={BASE_URL + this.state.profilepic} />
+                    <form
+                      onSubmit={this.submitComment}
+                      style={{ display: "flex" }}
+                    >
+                      <input
+                        type="text"
+                        className={classes.commentInput}
+                        placeholder="Add a public comment"
+                        onChange={this.addComment}
+                        id="comment"
+                      />
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="secondary"
+                        className={classes.commentbutton}
+                      >
+                        COMMENT
+                      </Button>
+                    </form>
+                  </div>
+                </Col>
+              </Row>
+
+              <Row style={{ marginTop: "2rem" }}>
+                <Col xs={12}>{comments}</Col>
+              </Row>
+            </Col>
+            <Col xs={12} md={4} style={{ padding: "2rem" }}>
+              <div style={{ fontSize: "1.5rem" }}>Recommended For You</div>
+              {RecommendedVideos}
+            </Col>
           </Row>
         </Container>
+        <Loader promiseTracker={usePromiseTracker} />
       </SideBar>
     );
   }

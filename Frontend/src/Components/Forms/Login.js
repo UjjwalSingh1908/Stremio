@@ -3,8 +3,10 @@ import Navbar from "../Navigation/Navbar";
 import { Link, Redirect } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import classes from "./Forms.css";
-import ServerService from "../../ServerService";
+import ServerService, { BASE_URL } from "../../ServerService";
 import Alerts from "../Alerts/Alert";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class Login extends Component {
   state = {
@@ -62,7 +64,10 @@ class Login extends Component {
           if (res.status === 200) {
             localStorage.setItem("token", res.data.accesstoken);
             localStorage.setItem("refreshtoken", res.data.refreshtoken);
-            localStorage.setItem("profilepic", res.data.user.profilepic);
+            localStorage.setItem(
+              "profilepic",
+              BASE_URL + res.data.user.profilepic
+            );
             localStorage.setItem("id", res.data.user.id);
             this.setState({ redirect: "/" });
           } else {
@@ -74,7 +79,7 @@ class Login extends Component {
         })
         .catch((err) => {
           console.log(err.response);
-          this.setState({ type: "error", text: err.response.data.message });
+          this.setState({ type: "error", text: err.response.data.error });
           //alert(err.response.data.error);
         });
     }
@@ -93,62 +98,62 @@ class Login extends Component {
     return (
       <React.Fragment>
         <Navbar />
-        <section className={classes.page}>
-          <Container fluid>
-            <Row>
-              {alert}
-              <Col md={{ span: 4, offset: 4 }} className={classes.loginform}>
-                <div className={classes.heading}> LOGIN </div>
-                <Form onSubmit={this.submitForm}>
-                  <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter email"
-                      name="email"
-                      required
-                      onChange={this.handleChange}
-                    />
 
-                    <div className={classes.error}>{this.state.errors.msg}</div>
-                  </Form.Group>
+        <Container fluid className={classes.page}>
+          <Row>
+            {alert}
+            <Col
+              md={{ span: 4, offset: 4 }}
+              xs={{ span: 10, offset: 1 }}
+              className={classes.loginform}
+            >
+              <div className={classes.heading}> LOGIN </div>
+              <Form onSubmit={this.submitForm}>
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    name="email"
+                    required
+                    onChange={this.handleChange}
+                  />
 
-                  <Form.Group
-                    controlId="formBasicPassword"
-                    style={{ marginTop: "2rem" }}
-                  >
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      required
-                      placeholder="Enter Password"
-                      name="password"
-                      onChange={this.handleChange}
-                    />
-                    <Link to="/forgotpassword" className={classes.link}>
-                      Forgot Password?
-                    </Link>
-                  </Form.Group>
+                  <div className={classes.error}>{this.state.errors.msg}</div>
+                </Form.Group>
 
-                  <Button
-                    variant="null"
-                    type="submit"
-                    className={classes.button}
-                  >
-                    Login
-                  </Button>
-                  <div>
-                    New User?{" "}
-                    <Link to="/signup" className={classes.link}>
-                      {" "}
-                      Signup{" "}
-                    </Link>{" "}
-                  </div>
-                </Form>
-              </Col>
-            </Row>
-          </Container>
-        </section>
+                <Form.Group
+                  controlId="formBasicPassword"
+                  style={{ marginTop: "2rem" }}
+                >
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    required
+                    placeholder="Enter Password"
+                    name="password"
+                    onChange={this.handleChange}
+                  />
+                  <Link to="/forgotpassword" className={classes.link}>
+                    Forgot Password?
+                  </Link>
+                </Form.Group>
+
+                <Button variant="null" type="submit" className={classes.button}>
+                  Login
+                </Button>
+                <div>
+                  New User?{" "}
+                  <Link to="/signup" className={classes.link}>
+                    {" "}
+                    Signup{" "}
+                  </Link>{" "}
+                </div>
+              </Form>
+            </Col>
+          </Row>
+        </Container>
+        <Loader promiseTracker={usePromiseTracker} />
       </React.Fragment>
     );
   }

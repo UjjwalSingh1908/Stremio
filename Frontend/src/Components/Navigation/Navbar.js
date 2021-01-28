@@ -7,6 +7,25 @@ import { Link } from "react-router-dom";
 import classes from "./Navigation.css";
 
 class NavBar extends Component {
+  state = {
+    input: {
+      keyword: "",
+    },
+  };
+
+  searchHandler = (event) => {
+    let input = this.state.input;
+    input[event.target.name] = event.target.value;
+
+    this.setState({
+      input,
+    });
+  };
+
+  submitHandler = (event) => {
+    event.preventDefault();
+  };
+
   render() {
     let token = localStorage.getItem("token");
     let Auth = false;
@@ -21,22 +40,27 @@ class NavBar extends Component {
           <Navbar.Brand as={Link} to="/" className={classes.logo}>
             STREMIO
           </Navbar.Brand>
-          <Form inline>
+          <Form inline onSubmit={this.submitHandler}>
             <InputGroup className={classes.InputGroup}>
               <FormControl
                 type="text"
                 placeholder="Search"
                 className={classes.Search}
+                name="keyword"
+                onChange={this.searchHandler}
               />
               <InputGroup.Append>
-                <InputGroup.Text
+                <Button
+                  variant="null"
                   type="submit"
                   className={classes.SearchIcon}
-                  as={Link}
-                  to="/search"
                 >
-                  <FontAwesomeIcon icon={faSearch} />
-                </InputGroup.Text>
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    as={Link}
+                    to={"/search/" + this.state.input.keyword}
+                  />
+                </Button>
               </InputGroup.Append>
             </InputGroup>
           </Form>
@@ -67,22 +91,28 @@ class NavBar extends Component {
           <Navbar.Brand as={Link} to="/" className={classes.logo}>
             STREMIO
           </Navbar.Brand>
-          <Form inline>
+          <Form inline onSubmit={this.submitHandler}>
             <InputGroup className={classes.InputGroup}>
               <FormControl
                 type="text"
                 placeholder="Search"
                 className={classes.Search}
+                name="keyword"
+                onChange={this.searchHandler}
               />
+
               <InputGroup.Append>
-                <InputGroup.Text
+                <Button
+                  variant="null"
                   type="submit"
                   className={classes.SearchIcon}
-                  as={Link}
-                  to="/search"
                 >
-                  <FontAwesomeIcon icon={faSearch} />
-                </InputGroup.Text>
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    as={Link}
+                    to={"/search/" + this.state.input.keyword}
+                  />
+                </Button>
               </InputGroup.Append>
             </InputGroup>
           </Form>

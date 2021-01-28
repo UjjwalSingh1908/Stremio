@@ -1,0 +1,53 @@
+.imagecontainer {
+  position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  color: white;
+  background-color: #a32946;
+}
+
+.icon {
+  color: white;
+  font-size: 1.5rem;
+  position: absolute;
+  top: 2rem;
+  left: 3.8rem;
+}
+
+.imagecontainer:hover .overlay {
+  opacity: 0.5;
+}
+
+.thumbnail {
+  height: 5.8rem !important;
+  width: 8.6rem !important;
+}
+
+.title {
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.information {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+}
+
+.content {
+  padding: 0 1rem;
+}

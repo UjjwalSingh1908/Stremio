@@ -14,38 +14,42 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Navbar, Form, Button, FormControl, InputGroup } from "react-bootstrap";
 import classes from "./Navigation.css";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Avatar } from "@material-ui/core";
-
-const mql = window.matchMedia(`(min-width: 600px)`);
+import { Home } from "@material-ui/icons";
 
 class SideBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      sidebarDocked: true,
-      sidebarOpen: false,
-    };
-
-    this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
-    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
-  }
+  state = {
+    sidebarDocked: true,
+    sidebarOpen: false,
+    input: {
+      keyword: "",
+    },
+  };
 
   componentDidMount() {
-    mql.addListener(this.mediaQueryChanged);
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      this.setState({ sidebarDocked: false });
+    } else this.setState({ sidebarDocked: true });
   }
 
-  //componentWillUnmount() {
-  //  this.state.mql.removeListener(this.mediaQueryChanged);
-  //}
-
-  onSetSidebarOpen(open) {
+  onSetSidebarOpen = () => {
+    let open = !this.state.sidebarOpen;
     this.setState({ sidebarOpen: open });
-  }
+  };
 
-  mediaQueryChanged() {
-    this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
-  }
+  searchHandler = (event) => {
+    let input = this.state.input;
+    input[event.target.name] = event.target.value;
+
+    this.setState({
+      input,
+    });
+  };
+
+  submitHandler = (event) => {
+    event.preventDefault();
+  };
 
   render() {
     let token = localStorage.getItem("token");
@@ -64,7 +68,7 @@ class SideBar extends React.Component {
           <span className={classes.burgericon}>
             <FontAwesomeIcon
               icon={faBars}
-              onClick={() => this.onSetSidebarOpen(true)}
+              onClick={() => this.onSetSidebarOpen()}
               className={classes.hamburger}
             />{" "}
           </span>
@@ -72,28 +76,33 @@ class SideBar extends React.Component {
           <Navbar.Brand as={Link} to="/" className={classes.sidelogo}>
             STREMIO
           </Navbar.Brand>
-          <Form inline>
+          <Form inline onSubmit={this.submitHandler}>
             <InputGroup className={classes.InputGroup}>
               <FormControl
                 type="text"
                 placeholder="Search"
                 className={classes.Search}
+                onChange={this.searchHandler}
+                name="keyword"
               />
               <InputGroup.Append>
-                <InputGroup.Text
-                  type="submit"
-                  className={classes.SearchIcon}
+                <Button
+                  variant="null"
                   as={Link}
-                  to="/search"
+                  to={"/search/" + this.state.input.keyword}
+                  className={classes.SearchIcon}
                 >
                   <FontAwesomeIcon icon={faSearch} />
-                </InputGroup.Text>
+                </Button>
               </InputGroup.Append>
             </InputGroup>
           </Form>
           <Navbar.Collapse className="justify-content-end">
             <Link to="/myprofile">
-              <Avatar src={localStorage.getItem("profilepic")} />
+              <Avatar
+                src={localStorage.getItem("profilepic")}
+                className={classes.profile}
+              />
             </Link>
 
             <Button
@@ -114,7 +123,7 @@ class SideBar extends React.Component {
           <span className={classes.burgericon}>
             <FontAwesomeIcon
               icon={faBars}
-              onClick={() => this.onSetSidebarOpen(true)}
+              onClick={() => this.onSetSidebarOpen()}
               className={classes.hamburger}
             />{" "}
           </span>
@@ -122,22 +131,25 @@ class SideBar extends React.Component {
           <Navbar.Brand as={Link} to="/" className={classes.sidelogo}>
             STREMIO
           </Navbar.Brand>
-          <Form inline>
+          <Form inline onSubmit={this.submitHandler}>
             <InputGroup className={classes.InputGroup}>
               <FormControl
                 type="text"
                 placeholder="Search"
                 className={classes.Search}
+                name="keyword"
+                onChange={this.searchHandler}
               />
+
               <InputGroup.Append>
-                <InputGroup.Text
-                  type="submit"
-                  className={classes.SearchIcon}
+                <Button
+                  variant="null"
                   as={Link}
-                  to="/search"
+                  to={"/search/" + this.state.input.keyword}
+                  className={classes.SearchIcon}
                 >
                   <FontAwesomeIcon icon={faSearch} />
-                </InputGroup.Text>
+                </Button>
               </InputGroup.Append>
             </InputGroup>
           </Form>
@@ -208,6 +220,7 @@ class SideBar extends React.Component {
                           ? classes.activelink
                           : classes.sidelink
                       }
+                      onClick={() => this.setState({ active: "subscribed" })}
                     >
                       <FontAwesomeIcon icon={faToggleOn} />{" "}
                       <span style={{ paddingLeft: "1rem" }}> Subscribed </span>
@@ -220,6 +233,7 @@ class SideBar extends React.Component {
                           ? classes.activelink
                           : classes.sidelink
                       }
+                      onClick={() => this.setState({ active: "history" })}
                     >
                       <FontAwesomeIcon icon={faHistory} />{" "}
                       <span style={{ paddingLeft: "1rem" }}> History </span>
@@ -232,6 +246,7 @@ class SideBar extends React.Component {
                           ? classes.activelink
                           : classes.sidelink
                       }
+                      onClick={() => this.setState({ active: "likedvideos" })}
                     >
                       <FontAwesomeIcon icon={faThumbsUp} />{" "}
                       <span style={{ paddingLeft: "1rem" }}>
@@ -247,6 +262,7 @@ class SideBar extends React.Component {
                           ? classes.activelink
                           : classes.sidelink
                       }
+                      onClick={() => this.setState({ active: "watchlater" })}
                     >
                       <FontAwesomeIcon icon={faClock} />{" "}
                       <span style={{ paddingLeft: "1rem" }}> Watch Later </span>
@@ -259,6 +275,7 @@ class SideBar extends React.Component {
                           ? classes.activelink
                           : classes.sidelink
                       }
+                      onClick={() => this.setState({ active: "yourvideos" })}
                     >
                       <FontAwesomeIcon icon={faVideo} />{" "}
                       <span style={{ paddingLeft: "1rem" }}> Your Videos </span>

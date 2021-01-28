@@ -69,37 +69,37 @@ class ShareModal extends Component {
             }}
           >
             <EmailShareButton url={window.location}>
-              <EmailIcon round />
+              <EmailIcon round className={classes.iconsize} />
             </EmailShareButton>
             <WhatsappShareButton url={window.location}>
-              <WhatsappIcon round />
+              <WhatsappIcon round className={classes.iconsize} />
             </WhatsappShareButton>
             <FacebookShareButton url={window.location}>
-              <FacebookIcon round />
+              <FacebookIcon round className={classes.iconsize} />
             </FacebookShareButton>
 
             <LinkedinShareButton url={window.location}>
-              <LinkedinIcon round />
+              <LinkedinIcon round className={classes.iconsize} />
             </LinkedinShareButton>
             <PinterestShareButton url={window.location}>
-              <PinterestIcon round />
+              <PinterestIcon round className={classes.iconsize} />
             </PinterestShareButton>
             <PocketShareButton url={window.location}>
-              <PocketIcon round />
+              <PocketIcon round className={classes.iconsize} />
             </PocketShareButton>
 
             <RedditShareButton url={window.location}>
               {" "}
-              <RedditIcon round />
+              <RedditIcon round className={classes.iconsize} />
             </RedditShareButton>
             <TwitterShareButton url={window.location}>
-              <TwitterIcon round />
+              <TwitterIcon round className={classes.iconsize} />
             </TwitterShareButton>
             <TelegramShareButton url={window.location}>
-              <TelegramIcon round />
+              <TelegramIcon round className={classes.iconsize} />
             </TelegramShareButton>
             <TumblrShareButton url={window.location}>
-              <TumblrIcon />
+              <TumblrIcon round className={classes.iconsize} />
             </TumblrShareButton>
           </ReactSmartScroller>
 

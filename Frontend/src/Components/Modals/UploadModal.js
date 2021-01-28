@@ -2,12 +2,16 @@ import React, { Component } from "react";
 import classes from "./Modal.css";
 import { Form, Modal } from "react-bootstrap";
 import { Button } from "@material-ui/core";
+import ServerService from "../../ServerService";
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from "react-promise-loader";
 
 class UploadModal extends Component {
   state = {
     input: {
       title: "",
       description: "",
+      category: "",
     },
     image: null,
     video: null,
@@ -20,6 +24,31 @@ class UploadModal extends Component {
     this.setState({
       input,
     });
+  };
+
+  submitHandler = (event) => {
+    event.preventDefault();
+    const data = {
+      title: this.state.input.title,
+      description: this.state.input.description,
+      category: this.state.input.category,
+      image: this.state.image,
+      video: this.state.video,
+    };
+
+    const fd = new FormData();
+
+    for (let formElement in data) {
+      fd.append(formElement, data[formElement]);
+      // console.log(formElement, data[formElement]);
+    }
+    ServerService.UploadVideo(fd)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
   };
 
   imageHandler = (event) => {
@@ -39,6 +68,7 @@ class UploadModal extends Component {
         onHide={this.props.onHide}
         contentClassName={classes.dialog}
       >
+        <Loader promiseTracker={usePromiseTracker} />
         <Modal.Header
           closeButton
           style={{
@@ -52,7 +82,7 @@ class UploadModal extends Component {
           Upload New Video
         </Modal.Header>
         <Modal.Body>
-          <Form className={classes.form}>
+          <Form className={classes.form} onSubmit={this.submitHandler}>
             <Form.Group>
               <Form.Label>Video Title</Form.Label>
               <Form.Control
@@ -76,9 +106,26 @@ class UploadModal extends Component {
                 name="description"
               />
             </Form.Group>
+            <Form.Group>
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                as="select"
+                required
+                className={classes.input}
+                name="category"
+                onChange={this.inputHandler}
+              >
+                <option>Music</option>
+                <option>Gaming</option>
+                <option>News</option>
+                <option>Movies</option>
+                <option>Others</option>
+              </Form.Control>
+            </Form.Group>
 
             <Form.Group>
               <Form.File
+                accept="image/jpeg"
                 id="exampleFormControlFile1"
                 label="Video Thumbnail"
                 onChange={this.imageHandler}
@@ -87,10 +134,11 @@ class UploadModal extends Component {
             </Form.Group>
             <Form.Group>
               <Form.File
+                accept="video/mp4"
                 id="exampleFormControlFile1"
                 label="Video"
                 required
-                onChange={this.imageHandler}
+                onChange={this.videoHandler}
               />
             </Form.Group>
             <Button

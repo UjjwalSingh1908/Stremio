@@ -1,0 +1,43 @@
+.channelName {
+  font-size: 1.7rem;
+  color: #fff;
+}
+
+.details {
+  font-size: 1rem;
+  color: #aaa;
+}
+
+.profileimage {
+  height: 8rem !important;
+  width: 8rem !important;
+  margin: auto;
+}
+
+.button {
+  margin-top: 2rem !important;
+}
+
+.link,
+.link:hover {
+  text-decoration: none;
+}
+
+.hr {
+  background-color: #303030 !important;
+  margin: 1rem !important;
+}
+
+@media (max-width: 600px) {
+  .profileimage {
+    height: 4.8rem !important;
+    width: 4.8rem !important;
+  }
+  .button {
+    width: 60%;
+  }
+
+  .content {
+    margin-left: 0.5rem;
+  }
+}
