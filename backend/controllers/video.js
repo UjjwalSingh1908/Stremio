@@ -1,4 +1,6 @@
-const asyncHandler = require("../middleware/aysncHandler");
+//middleware to handle exceptions inside async await
+const asyncHandler = require('express-async-handler');
+const Path = require('path');
 const { Op } = require("sequelize");
 const User = require('../models/user');
 const Video=require('../models/video');
@@ -8,17 +10,14 @@ const Comment=require('../models/comment');
 const Reply=require('../models/replies');
 const watchlater = require('../models/watchLater');
 const Subscribe=require('../models/subscribe');
-
+const Story = require('../models/stories');
+const moment = require('moment');
 exports.uploadvideo = asyncHandler(async (req, res, next) => {
 
   const { title, description ,category} = req.body;
-  console.log(req.files);
+  // console.log(req.files);
   const video = req.files.video[0];
   const image = req.files.image[0];
-
-  console.log(title);
-  console.log(video);
-  console.log(image);
 
   if (!title || !video || !image) {
     return res.status(422).json({ error: "please fill all the required fields" });
@@ -356,4 +355,34 @@ exports.editVideo = asyncHandler (async(req,res,next)=>{
 
 });
 
+exports.uploadstory = asyncHandler (async (req,res,next)=>{
+  // const video = req.files.video[0];
+  // const video = req.files.video[0];
+  // const image = req.files.image[0];
+  const story = req.files.story[0];
+  console.log(story);
+  if (!story) {
+    return res.status(422).json({ error: "please fill all the required fields" });
+  }
+
+  const url = story.path.split('\\')[1];
+  // let url
+  // if(video)
+  // {
+  //   url = (video.path).split('\\')[1];
+  // }
+  // console.log(Path.extname(url));
+  // else{
+  //   url = (image.path).split('\\')[1];
+  // }
+  // console.log(videourl);
+  // console.log(thumbnail);
+  const storydata = await Story.create({
+    storyurl : url,
+    //expire :  + (60 * 60 * 1000)
+  });
+
+  console.log(storydata);
+  res.status(200).json({ success: true, data: storydata });
+})
 

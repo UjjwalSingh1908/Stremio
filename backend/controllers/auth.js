@@ -3,12 +3,14 @@ const bcrypt = require("bcryptjs");
 const jwt=require('jsonwebtoken')
 const {ACCESS,REFRESH}=require('../config/keys');
 const crypto=require('crypto');
-//import schema
+
+//import models
 const User = require('../models/user');
-const Token=require('../models/verificationToken')
+const Token=require('../models/verificationToken');
 
 //email sender api
-const email_sender=require('../helpers/email_sender')
+const email_sender=require('../helpers/email_sender');
+
 //regex
 var emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
 var passwordregex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/
@@ -18,15 +20,18 @@ const refreshtokenlist=[];
 exports.signup =  (req,res,next) =>{
 
     const{name,email,password,confirmPassword,channelName}=req.body;
-    console.log(req.body);
+
     //check email validation
     var valid = emailRegex.test(email);
+
     if(!valid)
     {
         return res.status(422).json({error: "please enter valid email"});
     }
+
     //check password validation
     valid = passwordregex.test(password);
+
     if(!valid)
     {
         return res.status(422).json({error: "password must contain atleast one special character one number and length should be between 6 to 16 and spaces are not allowed"});
@@ -43,6 +48,19 @@ exports.signup =  (req,res,next) =>{
         return res.status(422).json({error:"password do not matched"})
     }
 
+    //checking uniqueness of channel name
+    const check = User.findOne({
+        where: {
+            channelName: channelName
+        }
+    });
+
+    if (!check) {
+        if ((check.id).toString() != (req.user.id).toString()) {
+            return res.status(400).json({ error: "OOPS!!! channel name already taken" });
+        }
+    }
+
     User.create({
         name:name,
         email:email,
@@ -50,7 +68,6 @@ exports.signup =  (req,res,next) =>{
         password:bcrypt.hashSync(req.body.password,8)
     })
     .then(user=>{
-        //console.log(user.id);
         Token.create({
             email: email, token: crypto.randomBytes(16).toString('hex') 
         })
@@ -66,11 +83,6 @@ exports.signup =  (req,res,next) =>{
         .catch(err=>{
             res.json(err);
         })
-        // const token = new Token({ });
-        // token.save();
-        //console.(token);
-        // res.send(token);
-       // res.status(200).json({message:"hurrah you singed up successfully"});
     })
     .catch(error=>{
         res.json(error)
@@ -80,8 +92,6 @@ exports.signup =  (req,res,next) =>{
 
 exports.confirmEmail = (req,res,next)=>{
 
-    //check in db
-    console.log(req.params.token);
     Token.findOne({
         where:{
             token:req.params.token
@@ -89,7 +99,7 @@ exports.confirmEmail = (req,res,next)=>{
     })
     .then(token=>{
         if (!token){
-            return res.status(400).send({msg:'Your verification link may have expired. Please click on resend for verify your Email.'});
+            return res.status(400).send({error:'Your verification link may have expired. Please click on resend for verify your Email.'});
         }
 
         //means token found
@@ -101,12 +111,10 @@ exports.confirmEmail = (req,res,next)=>{
         .then(user=>{
             // not valid user
             if (!user){
-                return res.status(401).send({msg:'We were unable to find a user for this verification. Please SignUp!'});
+                return res.status(401).send({error:'We were unable to find a user for this verification. Please SignUp!'});
             } 
             // user is already verified
             else if (user.isverified=="true"){
-                // user.isverified = 'false';
-                // user.save();
                 return res.status(200).send('User has been already verified. Please Login');
             }
             // verify user
@@ -117,34 +125,6 @@ exports.confirmEmail = (req,res,next)=>{
                 token.destroy();
                 return res.status(200).send({
                     message:"Your account has been successfully verified",
-                    // accesstoken,
-                    // refreshtoken,
-                    // user:{
-                    //     id,
-                    //     email,
-                    //     name
-                    // }
-                });
-
-                const accesstoken=jwt.sign({id:user.id},ACCESS,{expiresIn:"7d"});
-                const refreshtoken=jwt.sign({id:user.id},REFRESH,{expiresIn:"7d"});
-
-                refreshtokenlist.push(refreshtoken);
-
-                const {id,email,name}=user;
-                //res.send('Your account has been successfully verified');
-                //console.log(accesstoken);
-                console.log("<---------hello token generated------------------>");
-                res.redirect('/home');
-                return res.status(200).send({
-                    message:"Your account has been successfully verified",
-                    accesstoken,
-                    refreshtoken,
-                    user:{
-                        id,
-                        email,
-                        name
-                    }
                 });
             }
         })
@@ -168,7 +148,7 @@ exports.resendemail = (req,res,next)=>{
     .then(user=>{
         if(!user)
         {
-            return res.status(400).send({msg:'We were unable to find a user with that email. Make sure your Email is correct!'});
+            return res.status(400).send({error:'We were unable to find a user with that email. Make sure your Email is correct!'});
         }
         // user has been already verified
         else if (user.isverified=="true"){
@@ -200,20 +180,16 @@ exports.resendemail = (req,res,next)=>{
             })
             .catch(err=>{
                 res.json(err);
-            })
-            // res.send(token.name);
-            //console.log(req.headers.host);
-            
+            });
         }
 
     })
     .catch(err=>{
         resjson(err);
-    })
+    });
 };
 
 exports.forgotPasswordLink= (req,res,next)=>{
-
     User.findOne({
         where:{
             email:req.body.email
@@ -222,7 +198,7 @@ exports.forgotPasswordLink= (req,res,next)=>{
     .then(user=>{
         if(!user)
         {
-            return res.status(400).send({msg:'We were unable to find a user with that email. Make sure your Email is correct!'});
+            return res.status(400).send({error:'We were unable to find a user with that email. Make sure your Email is correct!'});
         }
         else
         {
@@ -250,9 +226,6 @@ exports.forgotPasswordLink= (req,res,next)=>{
             .catch(err=>{
                 res.json(err);
             })
-            // res.send(token.name);
-            //console.log(req.headers.host);
-            
         }
 
     })
@@ -273,7 +246,7 @@ exports.changepassword = (req,res,next)=>{
     })
     .then(token=>{
         if (!token){
-            return res.status(400).send({msg:'Your change password link may have expired. Please click on forgot password again.'});
+            return res.status(400).send({error:'Your change password link may have expired. Please click on forgot password again.'});
         }
 
         //means token found
@@ -285,7 +258,7 @@ exports.changepassword = (req,res,next)=>{
         .then(user=>{
             // not valid user
             if (!user){
-                return res.status(401).send({msg:'We were unable to find a user for this verification. Please SignUp!'});
+                return res.status(401).send({error:'We were unable to find a user for this verification. Please SignUp!'});
             }
             // verify user
             else{
@@ -401,7 +374,7 @@ exports.login = (req,res,next)=>{
                     const accesstoken=jwt.sign({id:user.id},ACCESS,{expiresIn:"7d"});
                     const refreshtoken=jwt.sign({id:user.id},REFRESH,{expiresIn:"7d"});
 
-                   refreshtokenlist.push(refreshtoken);
+                    refreshtokenlist.push(refreshtoken);
 
                     const { id, email, name,profilepic,channelName } = user;
                     //res.send('Your account has been successfully verified');

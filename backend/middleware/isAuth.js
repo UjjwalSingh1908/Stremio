@@ -15,7 +15,7 @@ module.exports=(req,res,next)=>{
             return res.status(401).json(err)
         }
 
-        const {id,email,name,profilepic}=payload
+        const {id,email,name,profilepic,about}=payload
         // console.log(id);
         // console.log(email);
         // console.log(email);

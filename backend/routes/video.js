@@ -1,7 +1,7 @@
 //import all required packages here
 const express = require("express");
 const router = express.Router();
-const multer = require("multer")
+const multer = require("multer");
 
 //middleware for protected routes
 const isAuth=require('../middleware/isAuth')
@@ -20,6 +20,10 @@ const storage = multer.diskStorage({
         {
             cb(null,"./images");
         }
+        else if(file.fieldname === "story")
+        {
+            cb(null,"./story");
+        }
     },
     filename: (req,file,cb)=>{      //set filename as originalfilename 
         cb(null, file.originalname)
@@ -32,6 +36,10 @@ const fileFilter = (req,file,cb)=>{
         cb(null,true);
     }
     else if(file.mimetype==="image/jpg" || file.mimetype==="image/jpeg" || file.mimetype==="image/png"){
+        cb(null,true);
+    }
+    else if(file.mimetype==="story/jpg" || file.mimetype==="story/png" || file.mimetype === "story/jpeg" || file.mimetype === "story/mp4")
+    {
         cb(null,true);
     }
     else{
@@ -48,11 +56,16 @@ const imp = multer({storage:storage ,fileFilter:fileFilter}).fields(
         {
         name:'image', 
         //maxCount:1
+        },
+        {
+        name :'story'
         }
+        
     ]
 );
 
 router.post('/uploadvideo',[isAuth,imp],videoController.uploadvideo);
+router.post('/uploadstory',[isAuth,imp],videoController.uploadstory);
 router.get('/home',videoController.home);
 router.get("/:id/video",[isAuth],videoController.getvideo);
 router.get("/:id/view",[isAuth],videoController.viewVideo);

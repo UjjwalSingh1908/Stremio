@@ -1,4 +1,4 @@
-const asyncHandler = require("../middleware/aysncHandler");
+const asyncHandler = require('express-async-handler');
 const { Op, Sequelize } = require("sequelize");
 const User = require('../models/user');
 const Video = require('../models/video');
@@ -212,15 +212,47 @@ exports.myfeed = asyncHandler ( async (req,res,next)=>{
 });
 
 exports.editProfile = asyncHandler( async(req,res,next)=>{
-  await User.update(req.body, {
-    where: { id: req.user.id },
+  
+  const name=req.body.name;
+  const image=req.file;
+  const about = req.body.about;
+  const channelName = req.body.channelName;
+  const profilepic = (image.path).split('\\')[1];
+
+  const check = await User.findOne({
+    where:{
+      channelName:channelName
+    }
   });
+  // console.log(check.id);
+  // console.log(req.user.id);
+  if(check)
+  {
+    if((check.id).toString() !== (req.user.id).toString())
+    {
+      return res.status(400).json({error:"OOPS!!! channel name already taken"});
+    }
+  }
 
   const user = await User.findByPk(req.user.id, {
-    
   attributes: { exclude: ['password','confirmPassword'] }
   });
 
+   console.log(req.file);
+//  // user.about = req.body.about;
+//   if(req.file)
+//   {
+//     user.profilepic = (req.file).split('\\')[1];
+//   }
+//  // user.name = req.body.name;
+//   //user.channelName=req.body.channelName;
+console.log(user);
+user.name = name;
+user.profilepic = profilepic;
+user.about=about;
+//user.about = about;
+user.channelName = channelName;
+  await user.save();
   res.status(200).json({ success: true, data: user });
 });
 
@@ -344,7 +376,8 @@ exports.getWatchLater = asyncHandler(async (req, res, next) => {
 });
 
 exports.searchUser = asyncHandler(async(req,res,next)=>{
-  const tosearch=req.query.item;
+
+  const tosearch=(req.query.item).toString();
   if(!tosearch) 
   {
     return res.status(404).json({error:"please search sth"});
@@ -353,41 +386,34 @@ exports.searchUser = asyncHandler(async(req,res,next)=>{
   const userdata = await User.findAll({
     where:{
        channelName :{
-         [Op.ilike]: '%' + tosearch + '%'
+         [Op.substring]: tosearch
        }
-    }
+    },
+    attributes: { exclude: ['password','confirmPassword'] }
   });
 
   const videodata = await Video.findAll({
+    
     where:{
       [Op.or]:[
         {
           title:{
-            [Op.ilike]: '%' + tosearch + '%'
+            [Op.substring]: tosearch
           }
         },
         {
           description:{
-            [Op.ilike]: '%' + tosearch + '%'
+            [Op.substring]: tosearch
           }
         }
       ]
-    }
+    },
+    include: {
+      model: User,
+      attributes: ["id", "name", "profilepic","channelName"],
+    },
   });
-
-  // const categoryWiseData = await Video.findAll({
-  //   where:{
-  //     category : req.query.category
-  //   },
-  //   include: [{ model: User, attributes: ["id", "profilepic", "name","channelName" ]}],
-  //   order: [["createdAt", "DESC"]]
-  // });
-
-  userdata.setDataValue("videodata",videodata);
-  // userdata.setDataValue("Category",categoryWiseData);
-  return res.status(200).json({success:userdata});
-
-
+  return res.status(200).json({userdata,videodata});
 
 });
 
@@ -403,5 +429,6 @@ exports.categoryWiseVideos = asyncHandler(async (req,res,next)=>{
 
   return res.status(200).json({success:videodata});
 });
+
 
 

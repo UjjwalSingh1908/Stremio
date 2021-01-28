@@ -1,4 +1,5 @@
 const express=require('express');
+const http = require('http');
 const keys=require('./config/keys');
 const sequelize=require('./utils/database');
 const bodyParser=require('body-parser');
@@ -17,7 +18,12 @@ const reply=require('./models/replies');
 const view = require('./models/view');
 const Subscription=require('./models/subscribe');
 const watchLater=require('./models/watchLater');
+const story = require('./models/stories');
+const viewstory = require('./models/viewstory');
 const app=express();
+const socketio = require('socket.io');
+const server = http.createServer(app);
+const io = socketio(server);
 
 // Express middleware that allows POSTing data
 app.use(express.json());
@@ -60,14 +66,15 @@ user.hasMany(Subscription, {foreignKey: "subscribeTo"});
 user.hasMany(watchLater, {foreignKey: "userId"});
 video.hasMany(watchLater, { foreignKey: "videoId"});
 watchLater.belongsTo(user, { foreignKey: "userId" });
-
+user.belongsToMany(story,{through: viewstory , foreignKey : "userId"});
+story.belongsToMany(user, {through: viewstory, foreignKey:"storyId"});
 sequelize
     .sync(
-      // {force:true}
+       //{force:true}
     )
     .then(result => {
         //console.log(result);
-        app.listen(PORT);
+        server.listen(PORT);
         console.log("--------server started-----------");
     })
     .catch(err => {

@@ -44,6 +44,10 @@ const User=sequelize.define('user',{
     {
         type:Sequelize.INTEGER,
         defaultValue:0
+    },
+    about:
+    {
+        type:Sequelize.STRING
     }
 
 });
